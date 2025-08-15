@@ -3,6 +3,7 @@ package com.pahanaedu.servlets.auth;
 import com.pahanaedu.models.User;
 import com.pahanaedu.service.interfaces.UserService;
 import com.pahanaedu.service.impl.UserServiceImpl;
+import com.pahanaedu.servlets.common.BaseServlet;
 import com.pahanaedu.util.ValidationUtils;
 
 import jakarta.servlet.ServletException;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Servlet for handling user authentication (login)
@@ -20,6 +23,7 @@ import java.io.IOException;
  * - MVC Pattern: Controller for authentication
  * - Command Pattern: Different actions based on request
  * - Session Pattern: User session management
+ * - Security Pattern: Comprehensive security measures
  *
  * @author Pahana Edu Development Team
  * @version 1.0
@@ -28,6 +32,15 @@ import java.io.IOException;
 public class LoginServlet extends BaseServlet {
 
     private UserService userService;
+
+    // Track failed login attempts (in production, use Redis or database)
+    private static final Map<String, Integer> failedAttempts = new HashMap<>();
+    private static final Map<String, Long> lastAttemptTime = new HashMap<>();
+
+    // Security constants
+    private static final int MAX_FAILED_ATTEMPTS = 5;
+    private static final long LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+    private static final long RATE_LIMIT_TIME = 1000; // 1 second between attempts
 
     @Override
     public void init() throws ServletException {
@@ -60,6 +73,9 @@ public class LoginServlet extends BaseServlet {
                 case "forgot":
                     showForgotPasswordPage(request, response);
                     break;
+                case "reset":
+                    showPasswordResetPage(request, response);
+                    break;
                 default:
                     showLoginPage(request, response);
                     break;
@@ -88,6 +104,9 @@ public class LoginServlet extends BaseServlet {
                 case "forgot":
                     processForgotPassword(request, response);
                     break;
+                case "reset":
+                    processPasswordReset(request, response);
+                    break;
                 default:
                     processLogin(request, response);
                     break;
@@ -114,6 +133,28 @@ public class LoginServlet extends BaseServlet {
             request.setAttribute("redirectUrl", redirectUrl);
         }
 
+        // Check for logout success message
+        String logout = request.getParameter("logout");
+        if ("success".equals(logout)) {
+            setSuccessMessage(request, "You have been successfully logged out.");
+        } else if ("error".equals(logout)) {
+            setErrorMessage(request, "There was an error during logout. Please try again.");
+        }
+
+        // Check for session timeout
+        String timeout = request.getParameter("timeout");
+        if ("true".equals(timeout)) {
+            setInfoMessage(request, "Your session has expired. Please log in again.");
+        }
+
+        // Check for security alerts
+        String security = request.getParameter("security");
+        if ("violation".equals(security)) {
+            setErrorMessage(request, "Security violation detected. Please log in again.");
+        } else if ("true".equals(security)) {
+            setErrorMessage(request, "For security reasons, you have been logged out. Please log in again.");
+        }
+
         // Forward to login JSP
         forwardToJSP(request, response, "auth/login.jsp");
     }
@@ -133,6 +174,27 @@ public class LoginServlet extends BaseServlet {
     }
 
     /**
+     * Display password reset page
+     */
+    private void showPasswordResetPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String token = getSanitizedParameter(request, "token");
+        if (!ValidationUtils.isNotEmpty(token)) {
+            setErrorMessage(request, "Invalid or missing reset token.");
+            showLoginPage(request, response);
+            return;
+        }
+
+        // In production, validate the token against database
+        // For now, just show the reset form
+        request.setAttribute("resetToken", token);
+        request.setAttribute("csrfToken", generateCSRFToken(request));
+
+        forwardToJSP(request, response, "auth/password-reset.jsp");
+    }
+
+    /**
      * Process user login
      */
     private void processLogin(HttpServletRequest request, HttpServletResponse response)
@@ -141,6 +203,16 @@ public class LoginServlet extends BaseServlet {
         // Validate CSRF token
         if (!isValidCSRFToken(request)) {
             setErrorMessage(request, "Invalid request. Please try again.");
+            showLoginPage(request, response);
+            return;
+        }
+
+        // Get client IP for security tracking
+        String clientIP = getClientIP(request);
+
+        // Check for rate limiting
+        if (isRateLimited(request)) {
+            setErrorMessage(request, "Too many login attempts. Please wait before trying again.");
             showLoginPage(request, response);
             return;
         }
@@ -161,6 +233,14 @@ public class LoginServlet extends BaseServlet {
         // Validate input format
         if (!ValidationUtils.isValidUsername(username)) {
             setErrorMessage(request, "Invalid username format.");
+            recordFailedAttempt(clientIP);
+            showLoginPage(request, response);
+            return;
+        }
+
+        // Check if account is locked
+        if (isAccountLocked(clientIP)) {
+            setErrorMessage(request, "Account temporarily locked due to multiple failed attempts. Please try again later.");
             showLoginPage(request, response);
             return;
         }
@@ -171,14 +251,17 @@ public class LoginServlet extends BaseServlet {
 
             if (user != null) {
                 // Authentication successful
+                clearFailedAttempts(clientIP);
                 handleSuccessfulLogin(request, response, user, remember);
             } else {
                 // Authentication failed
+                recordFailedAttempt(clientIP);
                 handleFailedLogin(request, response, username);
             }
 
         } catch (Exception e) {
             System.err.println("Login error for user " + username + ": " + e.getMessage());
+            recordFailedAttempt(clientIP);
             setErrorMessage(request, "An error occurred during login. Please try again.");
             showLoginPage(request, response);
         }
@@ -193,10 +276,20 @@ public class LoginServlet extends BaseServlet {
         // Set user in session
         setCurrentUser(request, user);
 
+        // Set login time for session duration tracking
+        request.getSession().setAttribute("loginTime", System.currentTimeMillis());
+
+        // Store client IP for session validation
+        request.getSession().setAttribute("clientIP", getClientIP(request));
+
         // Handle "Remember Me" functionality
         if (rememberMe) {
             // Set longer session timeout (7 days)
             request.getSession().setMaxInactiveInterval(7 * 24 * 60 * 60);
+
+            // In production, you would also set a persistent cookie
+            // with a secure token linked to the user
+            setRememberMeCookie(response, user);
         }
 
         // Log successful login
@@ -266,6 +359,13 @@ public class LoginServlet extends BaseServlet {
                 // Search by username
                 user = userService.findUserByUsername(usernameOrEmail);
                 if (user != null) {
+                    // Generate reset token (in production, store in database)
+                    String resetToken = generatePasswordResetToken(user);
+
+                    // In production, send email with reset link
+                    // For demo, just log it
+                    System.out.println("Password reset token for " + user.getUsername() + ": " + resetToken);
+
                     setInfoMessage(request, "Password reset instructions have been sent to your registered email.");
                 } else {
                     setInfoMessage(request, "If an account with this username exists, password reset instructions will be sent.");
@@ -278,12 +378,6 @@ public class LoginServlet extends BaseServlet {
 
             // Log password reset request
             logAction(request, "PASSWORD_RESET_REQUEST", "Password reset requested for: " + usernameOrEmail);
-
-            // In a real application, you would:
-            // 1. Generate a secure reset token
-            // 2. Store it in database with expiration
-            // 3. Send email with reset link
-            // For this demo, we just show a message
 
             // Redirect back to login with info message
             request.getSession().setAttribute("infoMessage",
@@ -298,14 +392,55 @@ public class LoginServlet extends BaseServlet {
     }
 
     /**
-     * Check for brute force protection (basic implementation)
+     * Process password reset
      */
-    private boolean isAccountLocked(String username) {
-        // In a real application, you would check:
-        // 1. Number of failed attempts
-        // 2. Time window for attempts
-        // 3. Account lockout status
-        // This is a placeholder for the concept
+    private void processPasswordReset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        if (!isValidCSRFToken(request)) {
+            setErrorMessage(request, "Invalid request.");
+            showLoginPage(request, response);
+            return;
+        }
+
+        String token = getSanitizedParameter(request, "token");
+        String newPassword = request.getParameter("newPassword");
+        String confirmPassword = request.getParameter("confirmPassword");
+
+        if (!validateRequiredParams(request, "token", "newPassword", "confirmPassword")) {
+            setErrorMessage(request, "All fields are required.");
+            showPasswordResetPage(request, response);
+            return;
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            setErrorMessage(request, "Passwords do not match.");
+            showPasswordResetPage(request, response);
+            return;
+        }
+
+        // In production, validate token and update password
+        // For demo, just show success
+        setSuccessMessage(request, "Password has been reset successfully. Please log in with your new password.");
+        logAction(request, "PASSWORD_RESET", "Password reset completed");
+
+        redirectTo(response, request.getContextPath() + "/login");
+    }
+
+    /**
+     * Check for brute force protection
+     */
+    private boolean isAccountLocked(String clientIP) {
+        Integer attempts = failedAttempts.get(clientIP);
+        if (attempts != null && attempts >= MAX_FAILED_ATTEMPTS) {
+            Long lastAttempt = lastAttemptTime.get(clientIP);
+            if (lastAttempt != null && System.currentTimeMillis() - lastAttempt < LOCKOUT_TIME) {
+                return true;
+            } else {
+                // Lockout period expired, clear attempts
+                clearFailedAttempts(clientIP);
+            }
+        }
         return false;
     }
 
@@ -313,12 +448,71 @@ public class LoginServlet extends BaseServlet {
      * Rate limiting for login attempts
      */
     private boolean isRateLimited(HttpServletRequest request) {
-        // In a real application, you would implement:
-        // 1. IP-based rate limiting
-        // 2. Session-based attempt tracking
-        // 3. Progressive delays
-        // This is a placeholder for the concept
+        String clientIP = getClientIP(request);
+        Long lastAttempt = lastAttemptTime.get(clientIP);
+
+        if (lastAttempt != null && System.currentTimeMillis() - lastAttempt < RATE_LIMIT_TIME) {
+            return true;
+        }
+
+        lastAttemptTime.put(clientIP, System.currentTimeMillis());
         return false;
+    }
+
+    /**
+     * Record failed login attempt
+     */
+    private void recordFailedAttempt(String clientIP) {
+        failedAttempts.merge(clientIP, 1, Integer::sum);
+        lastAttemptTime.put(clientIP, System.currentTimeMillis());
+
+        System.out.println("SECURITY: Failed login attempt from IP: " + clientIP +
+                " (Total attempts: " + failedAttempts.get(clientIP) + ")");
+    }
+
+    /**
+     * Clear failed attempts after successful login
+     */
+    private void clearFailedAttempts(String clientIP) {
+        failedAttempts.remove(clientIP);
+        lastAttemptTime.remove(clientIP);
+    }
+
+    /**
+     * Set Remember Me cookie
+     */
+    private void setRememberMeCookie(HttpServletResponse response, User user) {
+        try {
+            // Generate secure token (in production, store in database)
+            String token = generateRememberMeToken(user);
+
+            jakarta.servlet.http.Cookie rememberCookie = new jakarta.servlet.http.Cookie("rememberToken", token);
+            rememberCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
+            rememberCookie.setPath("/");
+            rememberCookie.setHttpOnly(true);
+            rememberCookie.setSecure(true); // Use HTTPS in production
+
+            response.addCookie(rememberCookie);
+
+        } catch (Exception e) {
+            System.err.println("Error setting remember me cookie: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Generate Remember Me token
+     */
+    private String generateRememberMeToken(User user) {
+        // In production, use a cryptographically secure method
+        return java.util.UUID.randomUUID().toString() + "_" + user.getUserId();
+    }
+
+    /**
+     * Generate password reset token
+     */
+    private String generatePasswordResetToken(User user) {
+        // In production, use a cryptographically secure method and store in database
+        return java.util.UUID.randomUUID().toString() + "_" + System.currentTimeMillis();
     }
 
     /**
@@ -347,9 +541,28 @@ public class LoginServlet extends BaseServlet {
         return true;
     }
 
+    /**
+     * Clean up expired failed attempts (call periodically)
+     */
+    public static void cleanupExpiredAttempts() {
+        long now = System.currentTimeMillis();
+        lastAttemptTime.entrySet().removeIf(entry -> now - entry.getValue() > LOCKOUT_TIME);
+
+        // Remove corresponding failed attempts
+        lastAttemptTime.keySet().forEach(ip -> {
+            if (!lastAttemptTime.containsKey(ip)) {
+                failedAttempts.remove(ip);
+            }
+        });
+    }
+
     @Override
     public void destroy() {
         super.destroy();
         this.userService = null;
+
+        // Clean up static maps
+        failedAttempts.clear();
+        lastAttemptTime.clear();
     }
 }

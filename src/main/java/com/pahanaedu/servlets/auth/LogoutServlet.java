@@ -1,6 +1,7 @@
 package com.pahanaedu.servlets.auth;
 
 import com.pahanaedu.models.User;
+import com.pahanaedu.servlets.common.BaseServlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -57,9 +58,20 @@ public class LogoutServlet extends BaseServlet {
             throws ServletException, IOException {
 
         try {
+            // Check if request is AJAX
+            if (isAjaxRequest(request)) {
+                handleAjaxLogout(request, response);
+                return;
+            }
+
             // Get current user for logging
             User currentUser = getCurrentUser(request);
             String userId = currentUser != null ? currentUser.getUserId() : "Unknown";
+
+            // Audit logout for security monitoring
+            if (currentUser != null) {
+                auditLogout(request, currentUser);
+            }
 
             // Log logout action
             logAction(request, "LOGOUT", "User logged out: " + userId);
@@ -68,6 +80,9 @@ public class LogoutServlet extends BaseServlet {
             HttpSession session = request.getSession(false);
 
             if (session != null) {
+                // Clean up application-specific resources
+                cleanupApplicationResources(request);
+
                 // Clear specific attributes first (for cleanup)
                 clearSessionData(session);
 
@@ -124,8 +139,15 @@ public class LogoutServlet extends BaseServlet {
             // Remove CSRF tokens
             session.removeAttribute("csrfToken");
 
+            // Remove recent searches
+            session.removeAttribute("recentCustomerSearches");
+            session.removeAttribute("recentItemSearches");
+            session.removeAttribute("recentBillSearches");
+
             // Clear any other application-specific session data
-            // Add more as needed based on your application
+            session.removeAttribute("currentBill");
+            session.removeAttribute("billItems");
+            session.removeAttribute("preferences");
 
         } catch (Exception e) {
             System.err.println("Error clearing session data: " + e.getMessage());
@@ -152,6 +174,13 @@ public class LogoutServlet extends BaseServlet {
             authCookie.setHttpOnly(true);
             authCookie.setSecure(true);
             response.addCookie(authCookie);
+
+            // Clear session ID cookie
+            jakarta.servlet.http.Cookie sessionCookie = new jakarta.servlet.http.Cookie("JSESSIONID", null);
+            sessionCookie.setMaxAge(0);
+            sessionCookie.setPath("/");
+            sessionCookie.setHttpOnly(true);
+            response.addCookie(sessionCookie);
 
         } catch (Exception e) {
             System.err.println("Error clearing cookies: " + e.getMessage());
@@ -306,8 +335,9 @@ public class LogoutServlet extends BaseServlet {
             // Check for draft bills, unsaved forms, etc.
             Object draftBill = session.getAttribute("draftBill");
             Object unsavedForm = session.getAttribute("unsavedForm");
+            Object currentBill = session.getAttribute("currentBill");
 
-            return draftBill != null || unsavedForm != null;
+            return draftBill != null || unsavedForm != null || currentBill != null;
 
         } catch (Exception e) {
             return false;
@@ -328,6 +358,19 @@ public class LogoutServlet extends BaseServlet {
             // Release any locks held by the user
             // Clear temporary files
             // Notify other services of logout
+
+            // Clear any draft bills or temporary data
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                // Clean up billing session data
+                session.removeAttribute("currentBill");
+                session.removeAttribute("billItems");
+                session.removeAttribute("cartItems");
+
+                // Clean up search data
+                session.removeAttribute("lastSearchResults");
+                session.removeAttribute("searchFilters");
+            }
 
             System.out.println("Cleaned up resources for user: " + user.getUserId());
 
@@ -362,7 +405,7 @@ public class LogoutServlet extends BaseServlet {
             }
 
             // Send success response
-            sendJsonResponse(response, "{\"success\": true, \"message\": \"Logout successful\"}");
+            sendJsonResponse(response, "{\"success\": true, \"message\": \"Logout successful\", \"redirect\": \"/login\"}");
 
         } catch (Exception e) {
             System.err.println("Error during AJAX logout: " + e.getMessage());
@@ -376,6 +419,51 @@ public class LogoutServlet extends BaseServlet {
     private boolean isAjaxRequest(HttpServletRequest request) {
         String requestedWith = request.getHeader("X-Requested-With");
         return "XMLHttpRequest".equals(requestedWith);
+    }
+
+    /**
+     * Handle session timeout logout
+     */
+    public static void handleSessionTimeout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // Log session timeout
+            System.out.println("SESSION TIMEOUT: Session expired for IP: " +
+                    request.getRemoteAddr());
+
+            // Clear session if it exists
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+
+            // Redirect to login with timeout message
+            response.sendRedirect(request.getContextPath() + "/login?timeout=true");
+
+        } catch (Exception e) {
+            System.err.println("Error handling session timeout: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Logout due to security violation
+     */
+    public static void securityLogout(HttpServletRequest request, HttpServletResponse response, String reason) {
+        try {
+            // Log security logout
+            System.err.println("SECURITY LOGOUT: " + reason + " from IP: " + request.getRemoteAddr());
+
+            // Invalidate session immediately
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+
+            // Redirect to login with security alert
+            response.sendRedirect(request.getContextPath() + "/login?security=violation");
+
+        } catch (Exception e) {
+            System.err.println("Error during security logout: " + e.getMessage());
+        }
     }
 
     @Override
