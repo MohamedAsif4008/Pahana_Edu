@@ -5,37 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/configs/DatabaseConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/configs/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/BillDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/ItemDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Admin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Bill.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/BillItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Item.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Staff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/BillServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/ItemServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/BillService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/CustomerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/ItemService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/DatabaseConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/PasswordUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/UserFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/ValidationUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/database.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/DatabaseConnectionTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structure.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/BillDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/BillDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/ItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/ItemDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Bill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Bill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/BillItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/BillItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Item.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/Staff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structure.txt" beforeDir="false" afterPath="$PROJECT_DIR$/structure.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +38,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -149,7 +136,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754726005647</updated>
-      <workItem from="1754924603312" duration="11303000" />
+      <workItem from="1754924603312" duration="14718000" />
     </task>
     <servers />
   </component>
