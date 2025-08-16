@@ -5,7 +5,6 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- FIXED: Changed groupId to match your actual package structure -->
   <groupId>com.pahanaedu</groupId>
   <artifactId>Pahana_Edu</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -32,6 +31,20 @@
       <artifactId>jakarta.servlet.jsp-api</artifactId>
       <version>3.1.0</version>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- JSTL (JSP Standard Tag Library) - THIS IS WHAT YOU'RE MISSING -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <!-- JSTL Implementation -->
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>3.0.1</version>
     </dependency>
 
     <!-- MySQL Connector -->
@@ -64,6 +77,18 @@
       <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- JSTL - Essential for JSP taglib functionality -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>3.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -82,22 +107,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>3.3.2</version>
+        <version>3.4.0</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.1.2</version>
-        <configuration>
-          <useModulePath>false</useModulePath>
-          <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-          </includes>
         </configuration>
       </plugin>
     </plugins>
