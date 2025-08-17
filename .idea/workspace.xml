@@ -11,11 +11,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/bill/BillServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/bill/BillServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/create.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/edit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/edit.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/list.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/item/ItemServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/item/ItemServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/create.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/edit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/edit.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/list.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/view.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +236,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754726005647</updated>
-      <workItem from="1754924603312" duration="51331000" />
+      <workItem from="1754924603312" duration="54023000" />
     </task>
     <servers />
   </component>

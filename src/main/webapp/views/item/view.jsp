@@ -46,7 +46,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong><i class="bi bi-tag"></i> Name:</strong></td>
-                                    <td>${item.itemName}</td>
+                                    <td>${item.name}</td>
                                 </tr>
                                 <tr>
                                     <td><strong><i class="bi bi-collection"></i> Category:</strong></td>
@@ -223,7 +223,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <i class="bi bi-box-seam text-primary" style="font-size: 4rem;"></i>
-                    <h5 class="mt-2">${item.itemName}</h5>
+                    <h5 class="mt-2">${item.name}</h5>
                     <p class="text-muted">${item.itemId}</p>
                     <span class="badge bg-${item.active ? 'success' : 'danger'} fs-6">
                         ${item.active ? 'Available' : 'Unavailable'}
@@ -394,7 +394,7 @@
                         <c:forEach items="${relatedItems}" var="relatedItem" end="3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div>
-                                    <small><strong>${relatedItem.itemName}</strong></small><br>
+                                    <small><strong>${relatedItem.name}</strong></small><br>
                                     <small class="text-muted">Rs. ${relatedItem.price}</small>
                                 </div>
                                 <a href="${pageContext.request.contextPath}/items?action=view&id=${relatedItem.itemId}"
@@ -419,7 +419,7 @@
         <h2>Item Information</h2>
         <table border="1" cellpadding="5">
             <tr><td><strong>Item ID:</strong></td><td>${item.itemId}</td></tr>
-            <tr><td><strong>Name:</strong></td><td>${item.itemName}</td></tr>
+            <tr><td><strong>Name:</strong></td><td>${item.name}</td></tr>
             <tr><td><strong>Category:</strong></td><td>${item.category}</td></tr>
             <tr><td><strong>Price:</strong></td><td>Rs. ${item.price}</td></tr>
             <tr><td><strong>Stock Quantity:</strong></td><td>${item.stockQuantity} units</td></tr>
@@ -434,7 +434,7 @@
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
         <html>
-            <head><title>Item Details - ${item.itemName}</title></head>
+            <head><title>Item Details - ${item.name}</title></head>
             <body>${printContent}</body>
         </html>
     `);
@@ -459,7 +459,7 @@
     function exportItemData() {
         const data = [
             ['Item ID', '${item.itemId}'],
-            ['Name', '${item.itemName}'],
+            ['Name', '${item.name}'],
             ['Category', '${item.category}'],
             ['Price', '${item.price}'],
             ['Stock', '${item.stockQuantity}'],

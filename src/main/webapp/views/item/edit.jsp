@@ -58,14 +58,14 @@
 
                             <!-- Item Name -->
                             <div class="col-md-6 mb-3">
-                                <label for="itemName" class="form-label">
+                                <label for="name" class="form-label">
                                     <i class="bi bi-tag"></i> Item Name *
                                 </label>
                                 <input type="text"
                                        class="form-control"
-                                       id="itemName"
-                                       name="itemName"
-                                       value="${item.itemName}"
+                                       id="name"
+                                       name="name"
+                                       value="${item.name}"
                                        required>
                             </div>
 
@@ -199,7 +199,7 @@
                 <div class="card-body">
                     <div class="text-center mb-3">
                         <i class="bi bi-box-seam text-primary" style="font-size: 3rem;"></i>
-                        <h6 class="mt-2">${item.itemName}</h6>
+                        <h6 class="mt-2">${item.name}</h6>
                         <span class="badge bg-${item.active ? 'success' : 'danger'}">
                             ${item.active ? 'Active' : 'Inactive'}
                         </span>
@@ -322,7 +322,7 @@
 <script>
     // Store original values for reset functionality
     const originalValues = {
-        itemName: '${item.itemName}',
+        name: '${item.name}',
         category: '${item.category}',
         price: '${item.price}',
         stockQuantity: '${item.stockQuantity}',
@@ -334,12 +334,12 @@
 
     // Form validation
     document.getElementById('editItemForm').addEventListener('submit', function(e) {
-        const itemName = document.getElementById('itemName').value.trim();
+        const name = document.getElementById('name').value.trim();
         const category = document.getElementById('category').value;
         const price = document.getElementById('price').value;
         const stockQuantity = document.getElementById('stockQuantity').value;
 
-        if (!itemName || !category || !price || stockQuantity === '') {
+        if (!name || !category || !price || stockQuantity === '') {
             e.preventDefault();
             alert('Please fill in all required fields marked with *');
             return false;
@@ -362,7 +362,7 @@
     // Reset to original values
     function resetToOriginal() {
         if (confirm('Are you sure you want to reset all changes?')) {
-            document.getElementById('itemName').value = originalValues.itemName;
+            document.getElementById('name').value = originalValues.name;
             document.getElementById('category').value = originalValues.category;
             document.getElementById('price').value = originalValues.price;
             document.getElementById('stockQuantity').value = originalValues.stockQuantity;
@@ -377,8 +377,8 @@
     function previewChanges() {
         const changes = [];
 
-        if (document.getElementById('itemName').value !== originalValues.itemName) {
-            changes.push(`Name: "${originalValues.itemName}" → "${document.getElementById('itemName').value}"`);
+        if (document.getElementById('name').value !== originalValues.name) {
+            changes.push(`Name: "${originalValues.name}" → "${document.getElementById('name').value}"`);
         }
         if (document.getElementById('category').value !== originalValues.category) {
             changes.push(`Category: "${originalValues.category}" → "${document.getElementById('category').value}"`);
@@ -442,7 +442,7 @@
 
     // Focus on first editable field when page loads
     window.addEventListener('load', function() {
-        document.getElementById('itemName').focus();
+        document.getElementById('name').focus();
     });
 
     // Mark form as dirty when changes are made

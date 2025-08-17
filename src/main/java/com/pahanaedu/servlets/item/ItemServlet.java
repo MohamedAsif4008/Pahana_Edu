@@ -102,7 +102,7 @@ public class ItemServlet extends BaseServlet {
         request.setAttribute("totalItems", items.size());
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "item/item-list.jsp");
+        forwardToJSP(request, response, "item/list.jsp");
     }
 
     private void showItemDetails(HttpServletRequest request, HttpServletResponse response)
@@ -123,7 +123,7 @@ public class ItemServlet extends BaseServlet {
         }
 
         request.setAttribute("item", item);
-        forwardToJSP(request, response, "item/item-details.jsp");
+        forwardToJSP(request, response, "item/view.jsp");
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
@@ -136,7 +136,7 @@ public class ItemServlet extends BaseServlet {
         request.setAttribute("categories", categories);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "item/item-create.jsp");
+        forwardToJSP(request, response, "item/create.jsp");
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -156,7 +156,7 @@ public class ItemServlet extends BaseServlet {
         request.setAttribute("categories", categories);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "item/item-edit.jsp");
+        forwardToJSP(request, response, "item/edit.jsp");
     }
 
     private void createItem(HttpServletRequest request, HttpServletResponse response)

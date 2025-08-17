@@ -118,7 +118,7 @@ public class BillServlet extends BaseServlet {
         request.setAttribute("totalBills", totalBills);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "bill/bill-list.jsp");
+        forwardToJSP(request, response, "bill/list.jsp");
     }
 
     private void showBillDetails(HttpServletRequest request, HttpServletResponse response)
@@ -140,7 +140,7 @@ public class BillServlet extends BaseServlet {
 
         request.setAttribute("bill", bill);
         request.setAttribute("billItems", bill.getBillItems());
-        forwardToJSP(request, response, "bill/bill-details.jsp");
+        forwardToJSP(request, response, "bill/view.jsp");
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
@@ -155,7 +155,7 @@ public class BillServlet extends BaseServlet {
         request.setAttribute("items", items);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "bill/bill-create.jsp");
+        forwardToJSP(request, response, "bill/create.jsp");
     }
 
     private void printBill(HttpServletRequest request, HttpServletResponse response)

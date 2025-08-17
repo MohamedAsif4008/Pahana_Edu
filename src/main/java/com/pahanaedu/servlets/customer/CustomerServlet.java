@@ -216,7 +216,7 @@ public class CustomerServlet extends BaseServlet {
             logAction(request, "VIEW_CUSTOMER", "Account: " + accountNumber);
 
             // Forward to customer details JSP
-            forwardToJSP(request, response, "customer/details.jsp");
+            forwardToJSP(request, response, "customer/view.jsp");
 
         } catch (Exception e) {
             System.err.println("Error showing customer details: " + e.getMessage());

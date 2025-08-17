@@ -81,7 +81,7 @@
                                     </td>
                                     <td>
                                         <div>
-                                            <strong>${item.itemName}</strong>
+                                            <strong>${item.name}</strong>
                                             <c:if test="${not empty item.description}">
                                                 <br><small class="text-muted">${item.description}</small>
                                             </c:if>
@@ -117,7 +117,7 @@
                                                 <button type="button"
                                                         class="btn btn-outline-danger"
                                                         title="Delete"
-                                                        onclick="confirmDelete('${item.itemId}', '${item.itemName}')">
+                                                        onclick="confirmDelete('${item.itemId}', '${item.name}')">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </c:if>
@@ -270,8 +270,8 @@
 
 <script>
     // Delete confirmation
-    function confirmDelete(itemId, itemName) {
-        if (confirm(`Are you sure you want to delete item "${itemName}" (${itemId})?\n\nThis action cannot be undone.`)) {
+    function confirmDelete(itemId, name) {
+        if (confirm(`Are you sure you want to delete item "${name}" (${itemId})?\n\nThis action cannot be undone.`)) {
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '${pageContext.request.contextPath}/items';
