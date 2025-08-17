@@ -194,7 +194,7 @@ public class CustomerServlet extends BaseServlet {
             logAction(request, "VIEW_CUSTOMER_LIST", "Page: " + page + ", Search: " + searchTerm);
 
             // Forward to customer list JSP
-            forwardToJSP(request, response, "customer/customer-list.jsp");
+            forwardToJSP(request, response, "customer/list.jsp");
 
         } catch (Exception e) {
             System.err.println("Error showing customer list: " + e.getMessage());
@@ -232,7 +232,7 @@ public class CustomerServlet extends BaseServlet {
             logAction(request, "VIEW_CUSTOMER", "Account: " + accountNumber);
 
             // Forward to customer details JSP
-            forwardToJSP(request, response, "customer/customer-details.jsp");
+            forwardToJSP(request, response, "customer/details.jsp");
 
         } catch (Exception e) {
             System.err.println("Error showing customer details: " + e.getMessage());
@@ -263,7 +263,7 @@ public class CustomerServlet extends BaseServlet {
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
         // Forward to create customer form JSP
-        forwardToJSP(request, response, "customer/customer-create.jsp");
+        forwardToJSP(request, response, "customer/create.jsp");
     }
 
     /**
@@ -300,7 +300,7 @@ public class CustomerServlet extends BaseServlet {
             request.setAttribute("csrfToken", generateCSRFToken(request));
 
             // Forward to edit customer form JSP
-            forwardToJSP(request, response, "customer/customer-edit.jsp");
+            forwardToJSP(request, response, "customer/edit.jsp");
 
         } catch (Exception e) {
             System.err.println("Error showing edit form: " + e.getMessage());
@@ -488,7 +488,7 @@ public class CustomerServlet extends BaseServlet {
             request.setAttribute("csrfToken", generateCSRFToken(request));
 
             // Forward to delete confirmation JSP
-            forwardToJSP(request, response, "customer/customer-delete.jsp");
+            forwardToJSP(request, response, "customer/delete.jsp");
 
         } catch (Exception e) {
             System.err.println("Error showing delete confirmation: " + e.getMessage());
