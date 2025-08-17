@@ -290,7 +290,7 @@
         preview += `City: ${formData.get('city')}\n`;
         preview += `Postal Code: ${formData.get('postalCode')}\n`;
         preview += `Units Consumed: ${formData.get('unitsConsumed')}\n`;
-        preview += `Status: ${formData.get('active') === 'true' ? 'Active' : 'Inactive'}`;
+        preview += `Status: ${formData.get('active') == 'true' ? 'Active' : 'Inactive'}`;
 
         alert(preview);
     }
