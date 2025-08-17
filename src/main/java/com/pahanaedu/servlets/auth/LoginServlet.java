@@ -28,7 +28,14 @@ import java.util.Map;
  * @author Pahana Edu Development Team
  * @version 1.0
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login", "/auth/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {
+        "/login",
+        "/auth/login",
+        "/forgot-password",
+        "/auth/forgot-password",
+        "/password-reset",
+        "/auth/password-reset"
+})
 public class LoginServlet extends BaseServlet {
 
     private UserService userService;

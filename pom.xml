@@ -33,7 +33,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- JSTL (JSP Standard Tag Library) - THIS IS WHAT YOU'RE MISSING -->
+    <!-- JSTL API -->
     <dependency>
       <groupId>jakarta.servlet.jsp.jstl</groupId>
       <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
@@ -76,18 +76,6 @@
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.10.0</version>
       <scope>test</scope>
-    </dependency>
-
-    <!-- JSTL - Essential for JSP taglib functionality -->
-    <dependency>
-      <groupId>jakarta.servlet.jsp.jstl</groupId>
-      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.web</groupId>
-      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-      <version>3.0.1</version>
     </dependency>
   </dependencies>
 

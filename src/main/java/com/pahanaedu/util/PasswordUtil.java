@@ -162,4 +162,18 @@ public class PasswordUtil {
 
         return hasUpper && hasLower && hasDigit;
     }
+
+    /**
+     * TEMPORARY: Verify plain text password for development
+     * Remove this in production and use proper hashing
+     */
+    public static boolean verifyPlainTextPassword(String plainPassword, String storedPassword) {
+        if (plainPassword == null || storedPassword == null) {
+            return false;
+        }
+
+        // For development: direct comparison
+        // This is NOT secure and should only be used for testing
+        return plainPassword.equals(storedPassword);
+    }
 }

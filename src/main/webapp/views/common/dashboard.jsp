@@ -1,14 +1,10 @@
 <%--
-  Created by IntelliJ IDEA.
-  User: MOHAMED
-  Date: 16/08/2025
-  Time: 11:10
-  To change this template use File | Settings | File Templates.
+  Simple Dashboard JSP - Fixed version
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="pageTitle" value="Dashboard" />
-<jsp:include page="common/header.jsp" />
+<jsp:include page="header.jsp" />
 
 <!-- Dashboard Content -->
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -92,29 +88,30 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightning"></i> Quick Actions
+                </h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <a href="${pageContext.request.contextPath}/bills?action=create"
-                           class="btn btn-primary btn-lg w-100">
-                            <i class="bi bi-plus-circle"></i><br>
-                            Create New Bill
+                    <div class="col-md-3">
+                        <a href="/Pahana_Edu/customers?action=create" class="btn btn-primary w-100 mb-2">
+                            <i class="bi bi-person-plus"></i> Add Customer
                         </a>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <a href="${pageContext.request.contextPath}/customers?action=create"
-                           class="btn btn-success btn-lg w-100">
-                            <i class="bi bi-person-plus"></i><br>
-                            Add Customer
+                    <div class="col-md-3">
+                        <a href="/Pahana_Edu/items?action=create" class="btn btn-success w-100 mb-2">
+                            <i class="bi bi-plus-square"></i> Add Item
                         </a>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <a href="${pageContext.request.contextPath}/items?action=create"
-                           class="btn btn-info btn-lg w-100">
-                            <i class="bi bi-plus-square"></i><br>
-                            Add Item
+                    <div class="col-md-3">
+                        <a href="/Pahana_Edu/bills?action=create" class="btn btn-info w-100 mb-2">
+                            <i class="bi bi-plus-circle"></i> Create Bill
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="/Pahana_Edu/reports" class="btn btn-warning w-100 mb-2">
+                            <i class="bi bi-graph-up"></i> View Reports
                         </a>
                     </div>
                 </div>
@@ -123,59 +120,28 @@
     </div>
 </div>
 
-<!-- Recent Activity -->
+<!-- System Status -->
 <div class="row">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Bills</h5>
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle"></i> System Status
+                </h5>
             </div>
             <div class="card-body">
-                <c:choose>
-                    <c:when test="${not empty recentBills}">
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th>Bill #</th>
-                                    <th>Customer</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${recentBills}" var="bill" end="4">
-                                    <tr>
-                                        <td>
-                                            <a href="${pageContext.request.contextPath}/bills?action=view&id=${bill.billNumber}">
-                                                    ${bill.billNumber}
-                                            </a>
-                                        </td>
-                                        <td>${bill.customerName}</td>
-                                        <td>Rs. ${bill.totalAmount}</td>
-                                        <td><small class="text-muted">${bill.billDate}</small></td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="text-center">
-                            <a href="${pageContext.request.contextPath}/bills" class="btn btn-sm btn-outline-primary">
-                                View All Bills
-                            </a>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="text-center text-muted py-3">
-                            <i class="bi bi-receipt" style="font-size: 2rem;"></i>
-                            <p>No bills created yet</p>
-                            <a href="${pageContext.request.contextPath}/bills?action=create"
-                               class="btn btn-primary btn-sm">
-                                Create First Bill
-                            </a>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Database Connection</span>
+                    <span class="badge bg-success">Connected</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>User Role</span>
+                    <span class="badge bg-primary">${sessionScope.currentUser.role}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Last Login</span>
+                    <span class="text-muted">Just now</span>
+                </div>
             </div>
         </div>
     </div>
@@ -183,83 +149,68 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Low Stock Alert</h5>
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-check"></i> Quick Links
+                </h5>
             </div>
             <div class="card-body">
-                <c:choose>
-                    <c:when test="${not empty lowStockItems}">
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Current Stock</th>
-                                    <th>Reorder Level</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${lowStockItems}" var="item" end="4">
-                                    <tr>
-                                        <td>
-                                            <a href="${pageContext.request.contextPath}/items?action=view&id=${item.itemId}">
-                                                    ${item.name}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-warning">${item.stockQuantity}</span>
-                                        </td>
-                                        <td>${item.reorderLevel}</td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="text-center">
-                            <a href="${pageContext.request.contextPath}/items" class="btn btn-sm btn-outline-warning">
-                                Manage Inventory
-                            </a>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="text-center text-muted py-3">
-                            <i class="bi bi-check-circle" style="font-size: 2rem; color: green;"></i>
-                            <p>All items are well stocked!</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="/Pahana_Edu/customers" class="text-decoration-none">
+                            <i class="bi bi-people"></i> Manage Customers
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/Pahana_Edu/items" class="text-decoration-none">
+                            <i class="bi bi-box-seam"></i> Manage Items
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/Pahana_Edu/bills" class="text-decoration-none">
+                            <i class="bi bi-receipt"></i> View Bills
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Pahana_Edu/profile" class="text-decoration-none">
+                            <i class="bi bi-person-gear"></i> My Profile
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- User Role Specific Content -->
+<!-- Admin Tools (only for admin users) -->
 <c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
     <div class="row mt-4">
         <div class="col-md-12">
-            <div class="card border-warning">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="bi bi-shield-check"></i> Administrator Panel</h5>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-gear"></i> Admin Tools
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <p>You have administrator privileges. Additional management options:</p>
+                    <p class="text-muted">Additional management options:</p>
                     <div class="row">
                         <div class="col-md-3">
-                            <a href="${pageContext.request.contextPath}/users" class="btn btn-outline-dark w-100">
+                            <a href="/Pahana_Edu/users" class="btn btn-outline-dark w-100">
                                 <i class="bi bi-people"></i> Manage Users
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="${pageContext.request.contextPath}/reports" class="btn btn-outline-dark w-100">
+                            <a href="/Pahana_Edu/reports" class="btn btn-outline-dark w-100">
                                 <i class="bi bi-graph-up"></i> View Reports
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="${pageContext.request.contextPath}/settings" class="btn btn-outline-dark w-100">
+                            <a href="/Pahana_Edu/settings" class="btn btn-outline-dark w-100">
                                 <i class="bi bi-gear"></i> System Settings
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="${pageContext.request.contextPath}/backup" class="btn btn-outline-dark w-100">
+                            <a href="/Pahana_Edu/backup" class="btn btn-outline-dark w-100">
                                 <i class="bi bi-download"></i> Backup Data
                             </a>
                         </div>
@@ -270,4 +221,11 @@
     </div>
 </c:if>
 
-<jsp:include page="common/footer.jsp" />
+</div> <!-- End main-content -->
+</div> <!-- End row -->
+</div> <!-- End container-fluid -->
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -94,7 +94,11 @@
                         </div>
                     </c:if>
 
-                    <form action="${pageContext.request.contextPath}/login" method="post" id="loginForm">
+                    <form action="/Pahana_Edu/login" method="post" id="loginForm">
+                        <input type="hidden" name="csrfToken" value="${csrfToken}">
+
+
+
                         <!-- Username Field -->
                         <div class="mb-3">
                             <label for="username" class="form-label">
