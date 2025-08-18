@@ -43,15 +43,21 @@ public class BillDAO {
      * @return true if creation successful, false otherwise
      */
     public boolean createBill(Bill bill) {
+        System.out.println("=== BillDAO.createBill() called ===");
+        System.out.println("  Bill Number: " + bill.getBillNumber());
+        System.out.println("  Customer: " + bill.getCustomerAccountNumber());
+        System.out.println("  Total Items: " + bill.getBillItems().size());
+        
         Connection conn = null;
         try {
             conn = dbConnection.getConnection();
             conn.setAutoCommit(false); // Start transaction
+            System.out.println("  Transaction started");
 
-            // Insert bill record
+            // Insert bill header
             String billSql = """
-                INSERT INTO bills (bill_number, customer_account_number, total_amount, payment_method, 
-                                   bill_date, created_by, status, notes) 
+                INSERT INTO bills (bill_number, customer_account_number, total_amount, 
+                                 payment_method, bill_date, created_by, status, notes) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
@@ -59,49 +65,63 @@ public class BillDAO {
                 billStmt.setString(1, bill.getBillNumber());
                 billStmt.setString(2, bill.getCustomerAccountNumber());
                 billStmt.setBigDecimal(3, bill.getTotalAmount());
-                billStmt.setString(4, bill.getPaymentMethod().toString());
+                billStmt.setString(4, bill.getPaymentMethod().name());
                 billStmt.setTimestamp(5, bill.getBillDate());
                 billStmt.setString(6, bill.getCreatedBy());
-                billStmt.setString(7, bill.getStatus().toString());
+                billStmt.setString(7, bill.getStatus().name());
                 billStmt.setString(8, bill.getNotes());
 
-                billStmt.executeUpdate();
-            }
+                System.out.println("  Inserting bill header...");
+                int billResult = billStmt.executeUpdate();
+                System.out.println("  Bill header insert result: " + billResult);
 
-            // Insert bill items
-            if (!bill.getBillItems().isEmpty()) {
+                // Insert bill items
                 String itemSql = """
                     INSERT INTO bill_items (bill_number, item_id, quantity, unit_price, line_total) 
                     VALUES (?, ?, ?, ?, ?)
                     """;
 
-                try (PreparedStatement itemStmt = conn.prepareStatement(itemSql)) {
-                    for (BillItem billItem : bill.getBillItems()) {
+                System.out.println("  Processing " + bill.getBillItems().size() + " bill items...");
+                for (BillItem billItem : bill.getBillItems()) {
+                    System.out.println("    Processing item: " + billItem.getItemId() + " (qty: " + billItem.getQuantity() + ")");
+                    
+                    try (PreparedStatement itemStmt = conn.prepareStatement(itemSql)) {
                         itemStmt.setString(1, bill.getBillNumber());
                         itemStmt.setString(2, billItem.getItemId());
                         itemStmt.setInt(3, billItem.getQuantity());
                         itemStmt.setBigDecimal(4, billItem.getUnitPrice());
                         itemStmt.setBigDecimal(5, billItem.getLineTotal());
 
-                        itemStmt.executeUpdate();
+                        System.out.println("    Inserting bill item...");
+                        int itemResult = itemStmt.executeUpdate();
+                        System.out.println("    Bill item insert result: " + itemResult);
 
                         // Reduce stock for each item
-                        if (!itemDAO.reduceStock(billItem.getItemId(), billItem.getQuantity())) {
+                        System.out.println("    Reducing stock for item: " + billItem.getItemId());
+                        if (!itemDAO.reduceStock(billItem.getItemId(), billItem.getQuantity(), conn)) {
+                            System.err.println("    Failed to reduce stock for item: " + billItem.getItemId());
                             throw new SQLException("Failed to reduce stock for item: " + billItem.getItemId());
                         }
+                        System.out.println("    Stock reduced successfully");
                     }
                 }
             }
 
+            System.out.println("  Committing transaction...");
             conn.commit(); // Commit transaction
+            System.out.println("  Transaction committed successfully");
             return true;
 
         } catch (SQLException e) {
             System.err.println("Error creating bill: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
             if (conn != null) {
                 try {
+                    System.out.println("  Rolling back transaction...");
                     conn.rollback(); // Rollback on error
+                    System.out.println("  Transaction rolled back");
                 } catch (SQLException rollbackEx) {
                     System.err.println("Error rolling back transaction: " + rollbackEx.getMessage());
                 }
@@ -112,6 +132,7 @@ public class BillDAO {
                 try {
                     conn.setAutoCommit(true); // Reset auto-commit
                     DatabaseConnection.closeConnection(conn);
+                    System.out.println("  Connection closed");
                 } catch (SQLException e) {
                     System.err.println("Error resetting connection: " + e.getMessage());
                 }

@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
 
-            // TEMPORARY: Use plain text password comparison for development
-            if (!password.equals(user.getPassword())) {
+            // Use proper password verification
+            if (!PasswordUtil.verifyPassword(password, user.getPassword())) {
                 System.err.println("Password verification failed for user: " + username);
                 return null;
             }
@@ -99,6 +99,10 @@ public class UserServiceImpl implements UserService {
             System.err.println("Password does not meet strength requirements");
             return false;
         }
+
+        // Hash the password before saving
+        String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
 
         try {
             return userDAO.createUser(user);
@@ -146,8 +150,8 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        // FIXED: Verify current password (using correct variable names and return type)
-        if (!currentPassword.equals(user.getPassword())) {
+        // Verify current password (using correct variable names and return type)
+        if (!PasswordUtil.verifyPassword(currentPassword, user.getPassword())) {
             System.err.println("Current password is incorrect for user: " + userId);
             return false;  // Changed from 'return null' to 'return false'
         }
@@ -159,13 +163,13 @@ public class UserServiceImpl implements UserService {
         }
 
         // Check if new password is different from current
-        if (newPassword.equals(user.getPassword())) {  // FIXED: Use simple comparison for now
+        if (PasswordUtil.verifyPassword(newPassword, user.getPassword())) {  // FIXED: Use simple comparison for now
             System.err.println("New password must be different from current password");
             return false;
         }
 
         try {
-            return userDAO.updatePassword(userId, newPassword);
+            return userDAO.updatePassword(userId, PasswordUtil.hashPassword(newPassword));
         } catch (Exception e) {
             System.err.println("Error changing password: " + e.getMessage());
             return false;

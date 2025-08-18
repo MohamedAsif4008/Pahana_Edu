@@ -35,11 +35,11 @@ public class ValidationUtils {
     );
 
     private static final Pattern ITEM_ID_PATTERN = Pattern.compile(
-            "^ITEM[0-9]{3,6}$"
+            "^[A-Z]{2,10}[0-9]{1,6}$"
     );
 
     private static final Pattern BILL_NUMBER_PATTERN = Pattern.compile(
-            "^BILL[0-9]{6}$"
+            "^BILL[0-9]+$"
     );
 
     /**

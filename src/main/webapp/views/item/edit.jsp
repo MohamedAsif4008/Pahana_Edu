@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <form action="${pageContext.request.contextPath}/items" method="post" id="editItemForm">
                         <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="id" value="${item.itemId}">
+                        <input type="hidden" name="itemId" value="${item.itemId}">
 
                         <div class="row">
                             <!-- Item ID (Read-only) -->
@@ -117,14 +117,14 @@
 
                             <!-- Minimum Stock Level -->
                             <div class="col-md-6 mb-3">
-                                <label for="minStockLevel" class="form-label">
+                                <label for="reorderLevel" class="form-label">
                                     <i class="bi bi-exclamation-triangle"></i> Minimum Stock Level
                                 </label>
                                 <input type="number"
                                        class="form-control"
-                                       id="minStockLevel"
-                                       name="minStockLevel"
-                                       value="${item.minStockLevel}"
+                                       id="reorderLevel"
+                                       name="reorderLevel"
+                                       value="${item.reorderLevel}"
                                        min="0"
                                        step="1">
                             </div>
@@ -140,17 +140,7 @@
                                           rows="3">${item.description}</textarea>
                             </div>
 
-                            <!-- Supplier -->
-                            <div class="col-md-6 mb-3">
-                                <label for="supplier" class="form-label">
-                                    <i class="bi bi-building"></i> Supplier
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="supplier"
-                                       name="supplier"
-                                       value="${item.supplier}">
-                            </div>
+                        
 
                             <!-- Status -->
                             <div class="col-md-6 mb-3">
@@ -226,10 +216,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
-                            <td><strong>Supplier:</strong></td>
-                            <td><small>${item.supplier}</small></td>
-                        </tr>
+                    
                         <c:if test="${not empty item.createdDate}">
                             <tr>
                                 <td><strong>Added:</strong></td>
@@ -261,7 +248,7 @@
                         </div>
                     </div>
 
-                    <c:if test="${item.stockQuantity <= item.minStockLevel}">
+                    <c:if test="${item.stockQuantity <= item.reorderLevel}">
                         <div class="alert alert-warning alert-sm">
                             <i class="bi bi-exclamation-triangle"></i>
                             <strong>Low Stock Alert!</strong><br>
@@ -293,26 +280,7 @@
                 </div>
             </div>
 
-            <!-- Edit History (if available) -->
-            <c:if test="${not empty item.lastModifiedDate}">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-clock-history"></i> Last Updated
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="small mb-1">
-                            <strong>Date:</strong> <fmt:formatDate value="${item.lastModifiedDate}" pattern="MMM dd, yyyy HH:mm"/>
-                        </p>
-                        <c:if test="${not empty item.lastModifiedBy}">
-                            <p class="small mb-0">
-                                <strong>By:</strong> ${item.lastModifiedBy}
-                            </p>
-                        </c:if>
-                    </div>
-                </div>
-            </c:if>
+        
         </div>
     </div>
 </div>
@@ -326,9 +294,8 @@
         category: '${item.category}',
         price: '${item.price}',
         stockQuantity: '${item.stockQuantity}',
-        minStockLevel: '${item.minStockLevel}',
+        reorderLevel: '${item.reorderLevel}',
         description: '${item.description}',
-        supplier: '${item.supplier}',
         active: '${item.active}'
     };
 
@@ -366,7 +333,7 @@
             document.getElementById('category').value = originalValues.category;
             document.getElementById('price').value = originalValues.price;
             document.getElementById('stockQuantity').value = originalValues.stockQuantity;
-            document.getElementById('minStockLevel').value = originalValues.minStockLevel;
+            document.getElementById('reorderLevel').value = originalValues.reorderLevel;
             document.getElementById('description').value = originalValues.description;
             document.getElementById('supplier').value = originalValues.supplier;
             document.getElementById('active').value = originalValues.active;
@@ -389,8 +356,8 @@
         if (document.getElementById('stockQuantity').value !== originalValues.stockQuantity) {
             changes.push(`Stock: ${originalValues.stockQuantity} → ${document.getElementById('stockQuantity').value}`);
         }
-        if (document.getElementById('minStockLevel').value !== originalValues.minStockLevel) {
-            changes.push(`Min Stock: ${originalValues.minStockLevel} → ${document.getElementById('minStockLevel').value}`);
+        if (document.getElementById('reorderLevel').value !== originalValues.reorderLevel) {
+            changes.push(`Min Stock: ${originalValues.reorderLevel} → ${document.getElementById('reorderLevel').value}`);
         }
         if (document.getElementById('supplier').value !== originalValues.supplier) {
             changes.push(`Supplier: "${originalValues.supplier}" → "${document.getElementById('supplier').value}"`);

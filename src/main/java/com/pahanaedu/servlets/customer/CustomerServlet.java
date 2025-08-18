@@ -507,7 +507,11 @@ public class CustomerServlet extends BaseServlet {
             throws ServletException, IOException {
 
         try {
+            // Try both parameter names
             String accountNumber = getSanitizedParameter(request, PARAM_ID);
+            if (accountNumber == null || accountNumber.trim().isEmpty()) {
+                accountNumber = getSanitizedParameter(request, "accountNumber");
+            }
 
             if (!ValidationUtils.isValidAccountNumber(accountNumber)) {
                 setErrorMessage(request, "Invalid customer account number");

@@ -5,6 +5,8 @@ import com.pahanaedu.service.interfaces.UserService;
 import com.pahanaedu.service.impl.UserServiceImpl;
 import com.pahanaedu.servlets.common.BaseServlet;
 import com.pahanaedu.util.ValidationUtils;
+import com.pahanaedu.util.PasswordUtil;
+import com.pahanaedu.util.PasswordMigrationUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

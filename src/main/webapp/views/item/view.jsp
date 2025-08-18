@@ -74,21 +74,9 @@
                                 </tr>
                                 <tr>
                                     <td><strong><i class="bi bi-exclamation-triangle"></i> Min Stock:</strong></td>
-                                    <td>${item.minStockLevel} units</td>
+                                    <td>${item.reorderLevel} units</td>
                                 </tr>
-                                <tr>
-                                    <td><strong><i class="bi bi-building"></i> Supplier:</strong></td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${not empty item.supplier}">
-                                                ${item.supplier}
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="text-muted">Not specified</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </td>
-                                </tr>
+                                
                                 <tr>
                                     <td><strong><i class="bi bi-toggle-on"></i> Status:</strong></td>
                                     <td>
@@ -238,7 +226,7 @@
                                     <strong>Out of Stock</strong>
                                 </div>
                             </c:when>
-                            <c:when test="${item.stockQuantity <= item.minStockLevel}">
+                            <c:when test="${item.stockQuantity <= item.reorderLevel}">
                                 <div class="alert alert-warning">
                                     <i class="bi bi-exclamation-triangle"></i>
                                     <strong>Low Stock Warning</strong>
@@ -353,18 +341,7 @@
                                 <td><fmt:formatDate value="${item.createdDate}" pattern="MMM dd, yyyy"/></td>
                             </tr>
                         </c:if>
-                        <c:if test="${not empty item.lastModifiedDate}">
-                            <tr>
-                                <td><strong>Last Modified:</strong></td>
-                                <td><fmt:formatDate value="${item.lastModifiedDate}" pattern="MMM dd, yyyy"/></td>
-                            </tr>
-                        </c:if>
-                        <c:if test="${not empty item.lastModifiedBy}">
-                            <tr>
-                                <td><strong>Modified By:</strong></td>
-                                <td>${item.lastModifiedBy}</td>
-                            </tr>
-                        </c:if>
+                        
                         <tr>
                             <td><strong>Item Age:</strong></td>
                             <td>
@@ -423,12 +400,11 @@
             <tr><td><strong>Category:</strong></td><td>${item.category}</td></tr>
             <tr><td><strong>Price:</strong></td><td>Rs. ${item.price}</td></tr>
             <tr><td><strong>Stock Quantity:</strong></td><td>${item.stockQuantity} units</td></tr>
-            <tr><td><strong>Min Stock Level:</strong></td><td>${item.minStockLevel} units</td></tr>
-            <tr><td><strong>Supplier:</strong></td><td>${item.supplier}</td></tr>
+            <tr><td><strong>Min Stock Level:</strong></td><td>${item.reorderLevel} units</td></tr>
             <tr><td><strong>Status:</strong></td><td>${item.active ? 'Active' : 'Inactive'}</td></tr>
             <tr><td><strong>Description:</strong></td><td>${item.description}</td></tr>
         </table>
-        <p><small>Generated on: ${new Date()}</small></p>
+        <p><small>Generated on: \${new Date()}</small></p>
     `;
 
         const printWindow = window.open('', '_blank');
@@ -463,8 +439,7 @@
             ['Category', '${item.category}'],
             ['Price', '${item.price}'],
             ['Stock', '${item.stockQuantity}'],
-            ['Min Stock', '${item.minStockLevel}'],
-            ['Supplier', '${item.supplier}'],
+            ['Min Stock', '${item.reorderLevel}'],
             ['Status', '${item.active ? 'Active' : 'Inactive'}'],
             ['Description', '${item.description}']
         ];

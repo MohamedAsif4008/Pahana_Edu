@@ -66,7 +66,7 @@
                                         <c:forEach items="${customers}" var="customer">
                                             <option value="${customer.accountNumber}"
                                                 ${param.customerId == customer.accountNumber ? 'selected' : ''}>
-                                                    ${customer.accountNumber} - ${customer.fullName}
+                                                    ${customer.accountNumber} - ${customer.name}
                                             </option>
                                         </c:forEach>
                                     </select>
@@ -139,7 +139,7 @@
                                                     data-price="${item.price}"
                                                     data-stock="${item.stockQuantity}"
                                                 ${param.itemId == item.itemId ? 'selected' : ''}>
-                                                    ${item.itemId} - ${item.itemName} (Rs. ${item.price})
+                                                    ${item.itemId} - ${item.name} (Rs. ${item.price})
                                             </option>
                                         </c:forEach>
                                     </select>
@@ -245,8 +245,8 @@
                                 <c:forEach items="${popularItems}" var="item">
                                     <option value="${item.itemId}"
                                             data-price="${item.price}"
-                                            data-name="${item.itemName}">
-                                            ${item.itemName} - Rs. ${item.price}
+                                            data-name="${item.name}">
+                                            ${item.name} - Rs. ${item.price}
                                     </option>
                                 </c:forEach>
                             </select>
@@ -294,7 +294,7 @@
                 <option value="">Select Item</option>
                 <c:forEach items="${items}" var="item">
                     <option value="${item.itemId}" data-price="${item.price}" data-stock="${item.stockQuantity}">
-                        ${item.itemId} - ${item.itemName} (Rs. ${item.price})
+                        ${item.itemId} - ${item.name} (Rs. ${item.price})
                     </option>
                 </c:forEach>
             </select>
@@ -336,32 +336,68 @@
 
     // Update item price when item is selected
     function updateItemPrice(index) {
+        console.log('=== updateItemPrice() called ===');
+        console.log('  Index: ' + index);
+        
         const itemSelect = document.querySelector(`#billItem_${index} .item-select`);
         const unitPriceInput = document.querySelector(`#billItem_${index} .unit-price`);
-
-        if (itemSelect.value) {
-            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
-            const price = selectedOption.getAttribute('data-price');
-            unitPriceInput.value = price;
-            calculateLineTotal(index);
+        
+        console.log('  Item select found: ' + (itemSelect !== null));
+        console.log('  Unit price input found: ' + (unitPriceInput !== null));
+        
+        if (itemSelect && unitPriceInput) {
+            console.log('  Selected value: ' + itemSelect.value);
+            console.log('  Selected index: ' + itemSelect.selectedIndex);
+            
+            if (itemSelect.value) {
+                const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                console.log('  Selected option: ' + selectedOption.text);
+                console.log('  Price from data attribute: ' + price);
+                
+                unitPriceInput.value = price;
+                console.log('  Unit price set to: ' + unitPriceInput.value);
+                
+                calculateLineTotal(index);
+            } else {
+                unitPriceInput.value = '';
+                console.log('  Unit price cleared');
+                calculateLineTotal(index);
+            }
         } else {
-            unitPriceInput.value = '';
-            calculateLineTotal(index);
+            console.error('  Could not find required elements');
         }
     }
 
     // Calculate line total for a specific item
     function calculateLineTotal(index) {
+        console.log('=== calculateLineTotal() called ===');
+        console.log('  Index: ' + index);
+        
         const quantityInput = document.querySelector(`#billItem_${index} .quantity-input`);
         const unitPriceInput = document.querySelector(`#billItem_${index} .unit-price`);
         const lineTotalInput = document.querySelector(`#billItem_${index} .line-total`);
+        
+        console.log('  Quantity input found: ' + (quantityInput !== null));
+        console.log('  Unit price input found: ' + (unitPriceInput !== null));
+        console.log('  Line total input found: ' + (lineTotalInput !== null));
 
-        const quantity = parseFloat(quantityInput.value) || 0;
-        const unitPrice = parseFloat(unitPriceInput.value) || 0;
-        const lineTotal = quantity * unitPrice;
+        if (quantityInput && unitPriceInput && lineTotalInput) {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const unitPrice = parseFloat(unitPriceInput.value) || 0;
+            const lineTotal = quantity * unitPrice;
+            
+            console.log('  Quantity: ' + quantity);
+            console.log('  Unit Price: ' + unitPrice);
+            console.log('  Line Total: ' + lineTotal);
 
-        lineTotalInput.value = lineTotal.toFixed(2);
-        calculateTotals();
+            lineTotalInput.value = lineTotal.toFixed(2);
+            console.log('  Line total set to: ' + lineTotalInput.value);
+            
+            calculateTotals();
+        } else {
+            console.error('  Could not find required elements for line total calculation');
+        }
     }
 
     // Calculate bill totals
@@ -387,7 +423,7 @@
         const quickSelect = document.getElementById('quickAddItem');
         if (quickSelect.value) {
             const itemId = quickSelect.value;
-            const itemName = quickSelect.options[quickSelect.selectedIndex].getAttribute('data-name');
+            const name = quickSelect.options[quickSelect.selectedIndex].getAttribute('data-name');
             const itemPrice = quickSelect.options[quickSelect.selectedIndex].getAttribute('data-price');
 
             // Check if item already exists in bill
@@ -428,7 +464,7 @@
 
             customerDetails.innerHTML = `
             <p><strong>Account:</strong> ${customerId}</p>
-            <p><strong>Name:</strong> ${this.options[this.selectedIndex].text.split(' - ')[1]}</p>
+            <p><strong>Name:</strong> \${this.options[this.selectedIndex].text.split(' - ')[1]}</p>
             <p class="text-success"><small>Customer loaded successfully</small></p>
         `;
             customerInfo.style.display = 'block';
@@ -518,7 +554,7 @@
                         <option value="">Select Item</option>
                         <c:forEach items="${items}" var="item">
                             <option value="${item.itemId}" data-price="${item.price}" data-stock="${item.stockQuantity}">
-                                ${item.itemId} - ${item.itemName} (Rs. ${item.price})
+                                ${item.itemId} - ${item.name} (Rs. ${item.price})
                             </option>
                         </c:forEach>
                     </select>
@@ -584,6 +620,8 @@
 
     // Initialize
     window.addEventListener('load', function() {
+        console.log('=== Page loaded, initializing... ===');
+        
         // Auto-generate bill number if empty
         const billNumberInput = document.getElementById('billNumber');
         if (!billNumberInput.value) {
@@ -600,7 +638,37 @@
             billDateInput.value = dateString;
         }
 
+        // Ensure first item's event handlers are properly set
+        const firstItemSelect = document.querySelector('#billItem_0 .item-select');
+        const firstQuantityInput = document.querySelector('#billItem_0 .quantity-input');
+        
+        console.log('First item select found:', firstItemSelect);
+        console.log('First quantity input found:', firstQuantityInput);
+        
+        if (firstItemSelect) {
+            // Remove existing event listeners and add new ones
+            firstItemSelect.removeEventListener('change', firstItemSelect._changeHandler);
+            firstItemSelect._changeHandler = function() {
+                console.log('First item select changed, calling updateItemPrice(0)');
+                updateItemPrice(0);
+            };
+            firstItemSelect.addEventListener('change', firstItemSelect._changeHandler);
+            console.log('First item select event handler attached');
+        }
+
+        if (firstQuantityInput) {
+            // Remove existing event listeners and add new ones
+            firstQuantityInput.removeEventListener('change', firstQuantityInput._changeHandler);
+            firstQuantityInput._changeHandler = function() {
+                console.log('First quantity input changed, calling calculateLineTotal(0)');
+                calculateLineTotal(0);
+            };
+            firstQuantityInput.addEventListener('change', firstQuantityInput._changeHandler);
+            console.log('First quantity input event handler attached');
+        }
+
         // Focus on customer selection
         document.getElementById('customerAccountNumber').focus();
+        console.log('=== Initialization complete ===');
     });
 </script>

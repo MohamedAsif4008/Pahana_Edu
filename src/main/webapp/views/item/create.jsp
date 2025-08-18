@@ -143,18 +143,7 @@
                                           placeholder="Enter item description (optional)">${param.description}</textarea>
                             </div>
 
-                            <!-- Supplier -->
-                            <div class="col-md-6 mb-3">
-                                <label for="supplier" class="form-label">
-                                    <i class="bi bi-building"></i> Supplier
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="supplier"
-                                       name="supplier"
-                                       value="${param.supplier}"
-                                       placeholder="Supplier name">
-                            </div>
+      
 
                             <!-- Status -->
                             <div class="col-md-6 mb-3">
@@ -316,15 +305,15 @@
         const formData = new FormData(document.getElementById('itemForm'));
         let preview = 'Item Preview:\n\n';
 
-        preview += `Item ID: ${formData.get('itemId')}\n`;
-        preview += `Name: ${formData.get('name')}\n`;
-        preview += `Category: ${formData.get('category')}\n`;
-        preview += `Price: Rs. ${formData.get('price')}\n`;
-        preview += `Stock: ${formData.get('stockQuantity')} units\n`;
-        preview += `Min Stock: ${formData.get('minStockLevel')}\n`;
-        preview += `Supplier: ${formData.get('supplier')}\n`;
-        preview += `Status: ${formData.get('active') === 'true' ? 'Active' : 'Inactive'}\n`;
-        preview += `Description: ${formData.get('description')}`;
+        // Use string concatenation instead of template literals to avoid JSP EL conflicts
+        preview += 'Item ID: ' + formData.get('itemId') + '\n';
+        preview += 'Name: ' + formData.get('itemName') + '\n';
+        preview += 'Category: ' + formData.get('category') + '\n';
+        preview += 'Price: Rs. ' + formData.get('price') + '\n';
+        preview += 'Stock: ' + formData.get('stockQuantity') + ' units\n';
+        preview += 'Min Stock: ' + formData.get('minStockLevel') + '\n';
+        preview += 'Status: ' + (formData.get('active') === 'true' ? 'Active' : 'Inactive') + '\n';
+        preview += 'Description: ' + formData.get('description');
 
         alert(preview);
     }
@@ -340,7 +329,6 @@
         document.getElementById('stockQuantity').value = '20';
         document.getElementById('minStockLevel').value = '5';
         document.getElementById('description').value = 'Comprehensive guide for advanced programming concepts and best practices.';
-        document.getElementById('supplier').value = 'Educational Publishers Ltd';
         document.getElementById('active').value = 'true';
     }
 
@@ -355,7 +343,6 @@
         document.getElementById('stockQuantity').value = '50';
         document.getElementById('minStockLevel').value = '10';
         document.getElementById('description').value = 'High-quality notebook set with ruled pages, perfect for students.';
-        document.getElementById('supplier').value = 'Office Supplies Co';
         document.getElementById('active').value = 'true';
     }
 

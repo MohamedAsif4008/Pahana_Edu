@@ -130,6 +130,15 @@
                         <i class="bi bi-plus-circle"></i> Create Bill
                     </a>
                 </li>
+                
+                <!-- Add this new section for Admin Users -->
+                <c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/users">
+                        <i class="bi bi-people-fill"></i> Manage Users
+                    </a>
+                </li>
+                </c:if>
             </ul>
 
             <hr>

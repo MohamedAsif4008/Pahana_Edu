@@ -59,11 +59,11 @@
                                                class="form-control"
                                                id="accountNumber"
                                                name="accountNumber"
-                                               value="${param.accountNumber}"
+                                               value="${nextAccountNumber}"
                                                placeholder="Enter unique account number"
                                                required>
                                         <small class="form-text text-muted">
-                                            Must be unique (e.g., ACC001, CUST001)
+                                            Auto-generated CUS format (e.g., CUS001, CUS002)
                                         </small>
                                     </div>
 
@@ -249,17 +249,6 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
-
-    // Auto-generate account number if empty
-    document.getElementById('name').addEventListener('blur', function() {
-        const accountNumber = document.getElementById('accountNumber');
-        if (!accountNumber.value.trim() && this.value.trim()) {
-            const names = this.value.trim().split(' ');
-            const initials = names.map(name => name.charAt(0).toUpperCase()).join('');
-            const timestamp = Date.now().toString().slice(-4);
-            accountNumber.value = 'ACC' + initials + timestamp;
-        }
-    });
 </script>
 
 <jsp:include page="../common/footer.jsp" />

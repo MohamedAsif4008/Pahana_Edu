@@ -270,20 +270,20 @@
 
 <script>
     // Delete confirmation
-    function confirmDelete(itemId, name) {
-        if (confirm(`Are you sure you want to delete item "${name}" (${itemId})?\n\nThis action cannot be undone.`)) {
-            const form = document.createElement('form');
+    function confirmDelete(itemId, itemName) {
+        if (confirm('Are you sure you want to delete item "' + itemName + '" (' + itemId + ')?\n\nThis action will deactivate the item.')) {
+            var form = document.createElement('form');
             form.method = 'POST';
             form.action = '${pageContext.request.contextPath}/items';
 
-            const actionInput = document.createElement('input');
+            var actionInput = document.createElement('input');
             actionInput.type = 'hidden';
             actionInput.name = 'action';
             actionInput.value = 'delete';
 
-            const idInput = document.createElement('input');
+            var idInput = document.createElement('input');
             idInput.type = 'hidden';
-            idInput.name = 'id';
+            idInput.name = 'itemId';  // Changed from 'id' to 'itemId'
             idInput.value = itemId;
 
             form.appendChild(actionInput);

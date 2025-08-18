@@ -236,26 +236,59 @@ public class ItemDAO {
      * @return true if reduction successful, false otherwise
      */
     public boolean reduceStock(String itemId, int quantity) {
+        return reduceStock(itemId, quantity, null);
+    }
+
+    public boolean reduceStock(String itemId, int quantity, Connection existingConn) {
+        System.out.println("=== reduceStock() called ===");
+        System.out.println("  Item ID: " + itemId);
+        System.out.println("  Quantity to reduce: " + quantity);
+        System.out.println("  Using existing connection: " + (existingConn != null));
+        
         String sql = """
             UPDATE items 
             SET stock_quantity = stock_quantity - ?, updated_date = CURRENT_TIMESTAMP 
             WHERE item_id = ? AND stock_quantity >= ?
             """;
 
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        Connection conn = null;
+        boolean shouldCloseConnection = false;
+        
+        try {
+            if (existingConn != null) {
+                conn = existingConn;
+            } else {
+                conn = dbConnection.getConnection();
+                shouldCloseConnection = true;
+            }
+            
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, quantity);
             stmt.setString(2, itemId);
             stmt.setInt(3, quantity);
 
+            System.out.println("  Executing SQL update...");
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            System.out.println("  Rows affected: " + rowsAffected);
+            
+            boolean result = rowsAffected > 0;
+            System.out.println("  Reduce stock result: " + result);
+            return result;
 
         } catch (SQLException e) {
             System.err.println("Error reducing stock: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
             e.printStackTrace();
             return false;
+        } finally {
+            if (shouldCloseConnection && conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                }
+            }
         }
     }
 
