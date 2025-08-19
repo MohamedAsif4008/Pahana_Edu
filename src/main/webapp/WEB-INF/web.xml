@@ -7,6 +7,12 @@
 
   <display-name>Pahana Edu Billing System</display-name>
 
+  <!-- Application Initializer Listener -->
+  <!-- <listener>
+    <listener-class>com.pahanaedu.util.ApplicationInitializer</listener-class>
+  </listener> -->
+
+
   <!-- JSP Configuration to ensure EL is enabled -->
   <jsp-config>
     <jsp-property-group>

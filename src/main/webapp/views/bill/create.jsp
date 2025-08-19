@@ -132,7 +132,7 @@
                             <div class="bill-item row mb-3" id="billItem_0">
                                 <div class="col-md-4">
                                     <label class="form-label">Item *</label>
-                                    <select class="form-select item-select" name="itemId[]" required onchange="updateItemPrice(0)">
+                                    <select class="form-select item-select" name="itemId[]" required>
                                         <option value="">Select Item</option>
                                         <c:forEach items="${items}" var="item">
                                             <option value="${item.itemId}"
@@ -151,8 +151,7 @@
                                            name="quantity[]"
                                            min="1"
                                            value="1"
-                                           required
-                                           onchange="calculateLineTotal(0)">
+                                           required>
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label">Unit Price</label>
@@ -186,9 +185,7 @@
                     <button type="button" class="btn btn-outline-secondary me-2" onclick="resetForm()">
                         <i class="bi bi-arrow-clockwise"></i> Reset
                     </button>
-                    <button type="button" class="btn btn-outline-primary me-2" onclick="previewBill()">
-                        <i class="bi bi-eye"></i> Preview
-                    </button>
+                
                     <button type="submit" class="btn btn-success">
                         <i class="bi bi-check-circle"></i> Create Bill
                     </button>
@@ -224,8 +221,7 @@
                                                name="discountAmount"
                                                value="0"
                                                min="0"
-                                               step="0.01"
-                                               onchange="calculateTotals()">
+                                               step="0.01">
                                     </div>
                                 </td>
                             </tr>
@@ -237,39 +233,11 @@
 
                         <hr>
 
-                        <!-- Quick Add Items -->
-                        <h6>Quick Add Items</h6>
-                        <div class="mb-2">
-                            <select class="form-select form-select-sm" id="quickAddItem">
-                                <option value="">Select item to add...</option>
-                                <c:forEach items="${popularItems}" var="item">
-                                    <option value="${item.itemId}"
-                                            data-price="${item.price}"
-                                            data-name="${item.name}">
-                                            ${item.name} - Rs. ${item.price}
-                                    </option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-primary w-100" onclick="quickAddItem()">
-                            <i class="bi bi-plus"></i> Quick Add
-                        </button>
+                      
                     </div>
                 </div>
 
-                <!-- Customer Info -->
-                <div class="card mt-3" id="customerInfo" style="display: none;">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-person-circle"></i> Customer Info
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="customerDetails">
-                            <!-- Customer details will be populated here -->
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </form>
@@ -290,7 +258,7 @@
         newItem.innerHTML = `
         <div class="col-md-4">
             <label class="form-label">Item *</label>
-            <select class="form-select item-select" name="itemId[]" required onchange="updateItemPrice(${billItemCounter})">
+            <select class="form-select item-select" name="itemId[]" required>
                 <option value="">Select Item</option>
                 <c:forEach items="${items}" var="item">
                     <option value="${item.itemId}" data-price="${item.price}" data-stock="${item.stockQuantity}">
@@ -301,7 +269,7 @@
         </div>
         <div class="col-md-2">
             <label class="form-label">Quantity *</label>
-            <input type="number" class="form-control quantity-input" name="quantity[]" min="1" value="1" required onchange="calculateLineTotal(${billItemCounter})">
+            <input type="number" class="form-control quantity-input" name="quantity[]" min="1" value="1" required>
         </div>
         <div class="col-md-2">
             <label class="form-label">Unit Price</label>
@@ -320,6 +288,25 @@
     `;
 
         container.appendChild(newItem);
+        
+        // Add event listeners to the newly created item using reliable approach
+        const newItemSelect = newItem.querySelector('.item-select');
+        const newQuantityInput = newItem.querySelector('.quantity-input');
+        
+        if (newItemSelect) {
+            newItemSelect.addEventListener('change', function() {
+                console.log('New item select changed for index: ' + billItemCounter);
+                updateItemPrice(billItemCounter);
+            });
+        }
+        
+        if (newQuantityInput) {
+            newQuantityInput.addEventListener('change', function() {
+                console.log('New quantity input changed for index: ' + billItemCounter);
+                calculateLineTotal(billItemCounter);
+            });
+        }
+        
         billItemCounter++;
     }
 
@@ -338,34 +325,86 @@
     function updateItemPrice(index) {
         console.log('=== updateItemPrice() called ===');
         console.log('  Index: ' + index);
+        console.log('  Timestamp: ' + new Date().toISOString());
         
-        const itemSelect = document.querySelector(`#billItem_${index} .item-select`);
-        const unitPriceInput = document.querySelector(`#billItem_${index} .unit-price`);
+        // Debug: Check all bill items and their IDs
+        const allBillItems = document.querySelectorAll('.bill-item');
+        console.log('  All bill items found:', allBillItems.length);
+        allBillItems.forEach(function(item, i) {
+            console.log(`  Bill item ${i}: ID="${item.id}", classes="${item.className}"`);
+        });
+        
+        // Try multiple approaches to find the bill item
+        let billItem = document.getElementById(`billItem_${index}`);
+        console.log('  getElementById result:', billItem);
+        
+        if (!billItem) {
+            // Try alternative approach
+            billItem = document.querySelector(`[id="billItem_${index}"]`);
+            console.log('  querySelector result:', billItem);
+        }
+        
+        if (!billItem) {
+            // Try finding by index in the collection
+            const billItems = document.querySelectorAll('.bill-item');
+            if (billItems[index]) {
+                billItem = billItems[index];
+                console.log('  Found by index in collection:', billItem);
+            }
+        }
+        
+        console.log('  Final bill item found: ' + (billItem !== null));
+        
+        if (!billItem) {
+            console.error('  Bill item not found for index: ' + index);
+            console.log('  Available bill items:', document.querySelectorAll('.bill-item').length);
+            console.log('  Bill item IDs:', Array.from(document.querySelectorAll('.bill-item')).map(el => el.id));
+            return;
+        }
+        
+        const itemSelect = billItem.querySelector('.item-select');
+        const unitPriceInput = billItem.querySelector('.unit-price');
         
         console.log('  Item select found: ' + (itemSelect !== null));
         console.log('  Unit price input found: ' + (unitPriceInput !== null));
         
-        if (itemSelect && unitPriceInput) {
-            console.log('  Selected value: ' + itemSelect.value);
-            console.log('  Selected index: ' + itemSelect.selectedIndex);
+        if (itemSelect) {
+            console.log('  Item select element:', itemSelect);
+            console.log('  Item select value: "' + itemSelect.value + '"');
+            console.log('  Item select selectedIndex: ' + itemSelect.selectedIndex);
+            console.log('  Item select options length: ' + itemSelect.options.length);
             
-            if (itemSelect.value) {
+            if (itemSelect.selectedIndex > 0) {
                 const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+                console.log('  Selected option element:', selectedOption);
+                console.log('  Selected option text: "' + selectedOption.text + '"');
+                console.log('  Selected option value: "' + selectedOption.value + '"');
+                
                 const price = selectedOption.getAttribute('data-price');
-                console.log('  Selected option: ' + selectedOption.text);
-                console.log('  Price from data attribute: ' + price);
+                console.log('  Price from data attribute: "' + price + '"');
                 
-                unitPriceInput.value = price;
-                console.log('  Unit price set to: ' + unitPriceInput.value);
-                
-                calculateLineTotal(index);
+                if (unitPriceInput) {
+                    unitPriceInput.value = price;
+                    console.log('  Unit price set to: "' + unitPriceInput.value + '"');
+                    
+                    // Force trigger the change event
+                    const event = new Event('change', { bubbles: true });
+                    unitPriceInput.dispatchEvent(event);
+                    
+                    calculateLineTotal(index);
+                } else {
+                    console.error('  Unit price input not found!');
+                }
             } else {
-                unitPriceInput.value = '';
-                console.log('  Unit price cleared');
-                calculateLineTotal(index);
+                console.log('  No item selected (selectedIndex <= 0)');
+                if (unitPriceInput) {
+                    unitPriceInput.value = '';
+                    console.log('  Unit price cleared');
+                    calculateLineTotal(index);
+                }
             }
         } else {
-            console.error('  Could not find required elements');
+            console.error('  Item select not found!');
         }
     }
 
@@ -373,10 +412,37 @@
     function calculateLineTotal(index) {
         console.log('=== calculateLineTotal() called ===');
         console.log('  Index: ' + index);
+        console.log('  Timestamp: ' + new Date().toISOString());
         
-        const quantityInput = document.querySelector(`#billItem_${index} .quantity-input`);
-        const unitPriceInput = document.querySelector(`#billItem_${index} .unit-price`);
-        const lineTotalInput = document.querySelector(`#billItem_${index} .line-total`);
+        // Try multiple approaches to find the bill item
+        let billItem = document.getElementById(`billItem_${index}`);
+        console.log('  getElementById result:', billItem);
+        
+        if (!billItem) {
+            // Try alternative approach
+            billItem = document.querySelector(`[id="billItem_${index}"]`);
+            console.log('  querySelector result:', billItem);
+        }
+        
+        if (!billItem) {
+            // Try finding by index in the collection
+            const billItems = document.querySelectorAll('.bill-item');
+            if (billItems[index]) {
+                billItem = billItems[index];
+                console.log('  Found by index in collection:', billItem);
+            }
+        }
+        
+        console.log('  Final bill item found: ' + (billItem !== null));
+        
+        if (!billItem) {
+            console.error('  Bill item not found for index: ' + index);
+            return;
+        }
+        
+        const quantityInput = billItem.querySelector('.quantity-input');
+        const unitPriceInput = billItem.querySelector('.unit-price');
+        const lineTotalInput = billItem.querySelector('.line-total');
         
         console.log('  Quantity input found: ' + (quantityInput !== null));
         console.log('  Unit price input found: ' + (unitPriceInput !== null));
@@ -392,30 +458,52 @@
             console.log('  Line Total: ' + lineTotal);
 
             lineTotalInput.value = lineTotal.toFixed(2);
-            console.log('  Line total set to: ' + lineTotalInput.value);
+            console.log('  Line total set to: "' + lineTotalInput.value + '"');
+            
+            // Force trigger the change event
+            const event = new Event('change', { bubbles: true });
+            lineTotalInput.dispatchEvent(event);
             
             calculateTotals();
         } else {
             console.error('  Could not find required elements for line total calculation');
+            console.log('  Quantity input:', quantityInput);
+            console.log('  Unit price input:', unitPriceInput);
+            console.log('  Line total input:', lineTotalInput);
         }
     }
 
     // Calculate bill totals
     function calculateTotals() {
+        console.log('=== calculateTotals() called ===');
+        console.log('  Timestamp: ' + new Date().toISOString());
+        
         let subtotal = 0;
+        const lineTotalInputs = document.querySelectorAll('.line-total');
+        
+        console.log('  Found ' + lineTotalInputs.length + ' line total inputs');
 
         // Sum all line totals
-        document.querySelectorAll('.line-total').forEach(function(input) {
-            subtotal += parseFloat(input.value) || 0;
+        lineTotalInputs.forEach(function(input, index) {
+            const value = parseFloat(input.value) || 0;
+            console.log('  Line total ' + index + ': ' + value);
+            subtotal += value;
         });
 
         const discount = parseFloat(document.getElementById('discountAmount').value) || 0;
         const tax = 0; // No tax for now
         const total = subtotal - discount + tax;
 
+        console.log('  Subtotal: ' + subtotal);
+        console.log('  Discount: ' + discount);
+        console.log('  Tax: ' + tax);
+        console.log('  Total: ' + total);
+
         document.getElementById('subtotalAmount').textContent = 'Rs. ' + subtotal.toFixed(2);
         document.getElementById('taxAmount').textContent = 'Rs. ' + tax.toFixed(2);
         document.getElementById('totalAmount').textContent = 'Rs. ' + total.toFixed(2);
+        
+        console.log('  Summary updated');
     }
 
     // Quick add item functionality
@@ -550,7 +638,7 @@
             <div class="bill-item row mb-3" id="billItem_0">
                 <div class="col-md-4">
                     <label class="form-label">Item *</label>
-                    <select class="form-select item-select" name="itemId[]" required onchange="updateItemPrice(0)">
+                    <select class="form-select item-select" name="itemId[]" required>
                         <option value="">Select Item</option>
                         <c:forEach items="${items}" var="item">
                             <option value="${item.itemId}" data-price="${item.price}" data-stock="${item.stockQuantity}">
@@ -561,7 +649,7 @@
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Quantity *</label>
-                    <input type="number" class="form-control quantity-input" name="quantity[]" min="1" value="1" required onchange="calculateLineTotal(0)">
+                    <input type="number" class="form-control quantity-input" name="quantity[]" min="1" value="1" required>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Unit Price</label>
@@ -579,6 +667,22 @@
                 </div>
             </div>
         `;
+
+            // Re-attach event listeners to the reset first item
+            const firstItemSelect = document.querySelector('#billItem_0 .item-select');
+            const firstQuantityInput = document.querySelector('#billItem_0 .quantity-input');
+            
+            if (firstItemSelect) {
+                firstItemSelect.addEventListener('change', function() {
+                    updateItemPrice(0);
+                });
+            }
+            
+            if (firstQuantityInput) {
+                firstQuantityInput.addEventListener('change', function() {
+                    calculateLineTotal(0);
+                });
+            }
 
             billItemCounter = 1;
             calculateTotals();
@@ -621,6 +725,7 @@
     // Initialize
     window.addEventListener('load', function() {
         console.log('=== Page loaded, initializing... ===');
+        console.log('  Timestamp: ' + new Date().toISOString());
         
         // Auto-generate bill number if empty
         const billNumberInput = document.getElementById('billNumber');
@@ -638,7 +743,15 @@
             billDateInput.value = dateString;
         }
 
-        // Ensure first item's event handlers are properly set
+        // Debug: Check all bill items
+        const allBillItems = document.querySelectorAll('.bill-item');
+        console.log('  Found ' + allBillItems.length + ' bill items on page load');
+        allBillItems.forEach(function(item, index) {
+            console.log('  Bill item ' + index + ' ID: ' + item.id);
+            console.log('  Bill item ' + index + ' classes: ' + item.className);
+        });
+
+        // Use event-based approach for the first item
         const firstItemSelect = document.querySelector('#billItem_0 .item-select');
         const firstQuantityInput = document.querySelector('#billItem_0 .quantity-input');
         
@@ -646,29 +759,279 @@
         console.log('First quantity input found:', firstQuantityInput);
         
         if (firstItemSelect) {
-            // Remove existing event listeners and add new ones
-            firstItemSelect.removeEventListener('change', firstItemSelect._changeHandler);
-            firstItemSelect._changeHandler = function() {
-                console.log('First item select changed, calling updateItemPrice(0)');
-                updateItemPrice(0);
-            };
-            firstItemSelect.addEventListener('change', firstItemSelect._changeHandler);
+            console.log('  First item select element:', firstItemSelect);
+            
+            // Remove any existing event listeners
+            firstItemSelect.removeAttribute('onchange');
+            
+            // Add new event listener using event-based approach
+            firstItemSelect.addEventListener('change', function(e) {
+                console.log('=== First item select change event triggered ===');
+                console.log('  Event:', e);
+                console.log('  Target:', e.target);
+                console.log('  Value:', e.target.value);
+                console.log('  Selected index:', e.target.selectedIndex);
+                updateItemPriceFromEvent(e);
+            });
             console.log('First item select event handler attached');
+        } else {
+            console.error('  First item select not found!');
         }
 
         if (firstQuantityInput) {
-            // Remove existing event listeners and add new ones
-            firstQuantityInput.removeEventListener('change', firstQuantityInput._changeHandler);
-            firstQuantityInput._changeHandler = function() {
-                console.log('First quantity input changed, calling calculateLineTotal(0)');
-                calculateLineTotal(0);
-            };
-            firstQuantityInput.addEventListener('change', firstQuantityInput._changeHandler);
+            console.log('  First quantity input element:', firstQuantityInput);
+            
+            // Remove any existing event listeners
+            firstQuantityInput.removeAttribute('onchange');
+            
+            // Add new event listener using event-based approach
+            firstQuantityInput.addEventListener('change', function(e) {
+                console.log('=== First quantity input change event triggered ===');
+                console.log('  Event:', e);
+                console.log('  Target:', e.target);
+                console.log('  Value:', e.target.value);
+                calculateLineTotalFromEvent(e);
+            });
             console.log('First quantity input event handler attached');
+        } else {
+            console.error('  First quantity input not found!');
+        }
+
+        // Fix discount input event handling
+        const discountInput = document.getElementById('discountAmount');
+        if (discountInput) {
+            console.log('  Discount input found:', discountInput);
+            
+            // Remove inline onchange attribute
+            discountInput.removeAttribute('onchange');
+            
+            // Add proper event listeners for discount
+            discountInput.addEventListener('change', function(e) {
+                console.log('=== Discount input change event triggered ===');
+                console.log('  Event:', e);
+                console.log('  Target:', e.target);
+                console.log('  Value:', e.target.value);
+                calculateTotals();
+            });
+            
+            discountInput.addEventListener('input', function(e) {
+                console.log('=== Discount input input event triggered ===');
+                console.log('  Event:', e);
+                console.log('  Target:', e.target);
+                console.log('  Value:', e.target.value);
+                calculateTotals();
+            });
+            
+            discountInput.addEventListener('blur', function(e) {
+                console.log('=== Discount input blur event triggered ===');
+                console.log('  Event:', e);
+                console.log('  Target:', e.target);
+                console.log('  Value:', e.target.value);
+                calculateTotals();
+            });
+            
+            console.log('Discount input event handlers attached');
+        } else {
+            console.error('  Discount input not found!');
         }
 
         // Focus on customer selection
         document.getElementById('customerAccountNumber').focus();
         console.log('=== Initialization complete ===');
     });
+</script>
+
+<script>
+// Add this at the end of your script
+
+// Test function - call this from browser console
+function testFirstItem() {
+    console.log('=== Manual test of first item ===');
+    
+    const firstItemSelect = document.querySelector('#billItem_0 .item-select');
+    const firstQuantityInput = document.querySelector('#billItem_0 .quantity-input');
+    
+    console.log('First item select:', firstItemSelect);
+    console.log('First quantity input:', firstQuantityInput);
+    
+    if (firstItemSelect && firstItemSelect.options.length > 1) {
+        console.log('Setting first item to first available option...');
+        firstItemSelect.selectedIndex = 1; // Select first actual item (index 0 is "Select Item")
+        
+        // Trigger change event
+        const event = new Event('change', { bubbles: true });
+        firstItemSelect.dispatchEvent(event);
+        
+        console.log('Change event dispatched');
+    } else {
+        console.error('Cannot test - no items available or elements not found');
+    }
+}
+
+// Also add a function to check all data attributes
+function checkItemData() {
+    console.log('=== Checking item data attributes ===');
+    
+    const firstItemSelect = document.querySelector('#billItem_0 .item-select');
+    if (firstItemSelect) {
+        console.log('First item select options:');
+        for (let i = 0; i < firstItemSelect.options.length; i++) {
+            const option = firstItemSelect.options[i];
+            console.log(`  Option ${i}: "${option.text}" - value: "${option.value}" - data-price: "${option.getAttribute('data-price')}"`);
+        }
+    } else {
+        console.error('First item select not found');
+    }
+}
+</script>
+
+<script>
+// Add this test function at the end of your script
+function debugBillItems() {
+    console.log('=== Debug Bill Items ===');
+    
+    // Check all bill items
+    const allBillItems = document.querySelectorAll('.bill-item');
+    console.log('Total bill items found:', allBillItems.length);
+    
+    allBillItems.forEach(function(item, index) {
+        console.log(`Bill item ${index}:`);
+        console.log('  ID:', item.id);
+        console.log('  Classes:', item.className);
+        console.log('  Element:', item);
+        
+        // Check if getElementById works
+        const byId = document.getElementById(item.id);
+        console.log('  getElementById result:', byId);
+        
+        // Check child elements
+        const itemSelect = item.querySelector('.item-select');
+        const quantityInput = item.querySelector('.quantity-input');
+        const unitPriceInput = item.querySelector('.unit-price');
+        const lineTotalInput = item.querySelector('.line-total');
+        
+        console.log('  Item select:', itemSelect);
+        console.log('  Quantity input:', quantityInput);
+        console.log('  Unit price input:', unitPriceInput);
+        console.log('  Line total input:', lineTotalInput);
+    });
+    
+    // Try to find by ID specifically
+    const billItem0 = document.getElementById('billItem_0');
+    console.log('getElementById("billItem_0"):', billItem0);
+    
+    // Try alternative selectors
+    const billItem0Alt = document.querySelector('[id="billItem_0"]');
+    console.log('querySelector("[id=\\"billItem_0\\"]"):', billItem0Alt);
+    
+    const billItem0Class = document.querySelector('.bill-item');
+    console.log('querySelector(".bill-item"):', billItem0Class);
+}
+</script>
+
+<script>
+// Alternative approach: Use event target instead of index
+function updateItemPriceFromEvent(event) {
+    console.log('=== updateItemPriceFromEvent() called ===');
+    console.log('  Event target:', event.target);
+    
+    const itemSelect = event.target;
+    const billItem = itemSelect.closest('.bill-item');
+    const unitPriceInput = billItem.querySelector('.unit-price');
+    
+    console.log('  Bill item found:', billItem);
+    console.log('  Unit price input found:', unitPriceInput);
+    
+    if (itemSelect && unitPriceInput) {
+        console.log('  Selected value: "' + itemSelect.value + '"');
+        console.log('  Selected index: ' + itemSelect.selectedIndex);
+        
+        if (itemSelect.selectedIndex > 0) {
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            console.log('  Price from data attribute: "' + price + '"');
+            
+            unitPriceInput.value = price;
+            console.log('  Unit price set to: "' + unitPriceInput.value + '"');
+            
+            // Find the index for calculateLineTotal
+            const billItems = document.querySelectorAll('.bill-item');
+            const index = Array.from(billItems).indexOf(billItem);
+            console.log('  Calculated index: ' + index);
+            
+            calculateLineTotal(index);
+        } else {
+            unitPriceInput.value = '';
+            console.log('  Unit price cleared');
+            
+            const billItems = document.querySelectorAll('.bill-item');
+            const index = Array.from(billItems).indexOf(billItem);
+            calculateLineTotal(index);
+        }
+    }
+}
+
+function calculateLineTotalFromEvent(event) {
+    console.log('=== calculateLineTotalFromEvent() called ===');
+    console.log('  Event target:', event.target);
+    
+    const quantityInput = event.target;
+    const billItem = quantityInput.closest('.bill-item');
+    const unitPriceInput = billItem.querySelector('.unit-price');
+    const lineTotalInput = billItem.querySelector('.line-total');
+    
+    console.log('  Bill item found:', billItem);
+    console.log('  Unit price input found:', unitPriceInput);
+    console.log('  Line total input found:', lineTotalInput);
+    
+    if (quantityInput && unitPriceInput && lineTotalInput) {
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const unitPrice = parseFloat(unitPriceInput.value) || 0;
+        const lineTotal = quantity * unitPrice;
+        
+        console.log('  Quantity: ' + quantity);
+        console.log('  Unit Price: ' + unitPrice);
+        console.log('  Line Total: ' + lineTotal);
+        
+        lineTotalInput.value = lineTotal.toFixed(2);
+        console.log('  Line total set to: "' + lineTotalInput.value + '"');
+        
+        calculateTotals();
+    }
+}
+</script>
+
+<script>
+// Add this test function at the end of your script
+function testDiscount() {
+    console.log('=== Testing Discount Calculation ===');
+    
+    const discountInput = document.getElementById('discountAmount');
+    const subtotalElement = document.getElementById('subtotalAmount');
+    const totalElement = document.getElementById('totalAmount');
+    
+    console.log('Discount input:', discountInput);
+    console.log('Subtotal element:', subtotalElement);
+    console.log('Total element:', totalElement);
+    
+    if (discountInput) {
+        console.log('Current discount value:', discountInput.value);
+        console.log('Current subtotal text:', subtotalElement.textContent);
+        console.log('Current total text:', totalElement.textContent);
+        
+        // Test setting a discount
+        discountInput.value = '100';
+        console.log('Set discount to 100');
+        
+        // Trigger the calculation
+        calculateTotals();
+        
+        console.log('After calculation:');
+        console.log('  Discount value:', discountInput.value);
+        console.log('  Subtotal text:', subtotalElement.textContent);
+        console.log('  Total text:', totalElement.textContent);
+    } else {
+        console.error('Discount input not found');
+    }
+}
 </script>

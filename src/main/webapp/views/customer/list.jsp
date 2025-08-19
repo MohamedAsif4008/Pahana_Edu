@@ -221,38 +221,7 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                <i class="bi bi-download"></i> Export Data
-                            </h6>
-                            <p class="card-text small">Export customer data for reports</p>
-                            <button class="btn btn-outline-success btn-sm me-2" onclick="exportCustomers('csv')">
-                                <i class="bi bi-filetype-csv"></i> CSV
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" onclick="exportCustomers('pdf')">
-                                <i class="bi bi-filetype-pdf"></i> PDF
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                <i class="bi bi-graph-up"></i> Quick Stats
-                            </h6>
-                            <p class="card-text small">
-                                Active Customers: <span class="fw-bold text-success">${activeCustomersCount}</span><br>
-                                Total Registered: <span class="fw-bold">${customers.size()}</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

@@ -271,4 +271,25 @@ public interface BillService {
      * @return true if all items have sufficient stock, false otherwise
      */
     boolean validateStockAvailability(List<BillItem> billItems);
+
+    /**
+     * Get paid bill count
+     *
+     * @return Total number of paid bills
+     */
+    int getPaidBillCount();
+
+    /**
+     * Get total revenue from all paid bills
+     *
+     * @return Total revenue amount
+     */
+    BigDecimal getTotalRevenue();
+
+    /**
+     * Get average bill amount from all bills
+     *
+     * @return Average bill amount
+     */
+    BigDecimal getAverageBillAmount();
 }

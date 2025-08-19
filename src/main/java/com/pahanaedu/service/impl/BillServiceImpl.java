@@ -957,4 +957,34 @@ public class BillServiceImpl implements BillService {
 
         return true;
     }
+
+    @Override
+    public int getPaidBillCount() {
+        try {
+            return billDAO.getPaidBillCount();
+        } catch (Exception e) {
+            System.err.println("Error getting paid bill count: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    @Override
+    public BigDecimal getTotalRevenue() {
+        try {
+            return billDAO.getTotalRevenue();
+        } catch (Exception e) {
+            System.err.println("Error getting total revenue: " + e.getMessage());
+            return BigDecimal.ZERO;
+        }
+    }
+
+    @Override
+    public BigDecimal getAverageBillAmount() {
+        try {
+            return billDAO.getAverageBillAmount();
+        } catch (Exception e) {
+            System.err.println("Error getting average bill amount: " + e.getMessage());
+            return BigDecimal.ZERO;
+        }
+    }
 }

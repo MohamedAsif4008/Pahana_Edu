@@ -143,24 +143,6 @@
 
             <hr>
 
-            <h6 class="text-muted">SEARCH</h6>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/customers/search">
-                        <i class="bi bi-search"></i> Search Customers
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/items/search">
-                        <i class="bi bi-search"></i> Search Items
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/bills/search">
-                        <i class="bi bi-search"></i> Search Bills
-                    </a>
-                </li>
-            </ul>
         </div>
         </c:if>
 

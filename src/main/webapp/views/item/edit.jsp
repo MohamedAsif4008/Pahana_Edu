@@ -163,9 +163,7 @@
                                         <i class="bi bi-arrow-clockwise"></i> Reset Changes
                                     </button>
                                     <div>
-                                        <button type="button" class="btn btn-outline-primary me-2" onclick="previewChanges()">
-                                            <i class="bi bi-eye"></i> Preview Changes
-                                        </button>
+                                        
                                         <button type="submit" class="btn btn-success">
                                             <i class="bi bi-check-circle"></i> Update Item
                                         </button>
@@ -227,58 +225,6 @@
                 </div>
             </div>
 
-            <!-- Stock Management -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-boxes"></i> Stock Management
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label small">Quick Stock Update:</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="stockAdjustment" placeholder="0">
-                            <button class="btn btn-outline-success" onclick="adjustStock(1)">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="adjustStock(-1)">
-                                <i class="bi bi-dash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <c:if test="${item.stockQuantity <= item.reorderLevel}">
-                        <div class="alert alert-warning alert-sm">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            <strong>Low Stock Alert!</strong><br>
-                            Current stock is at or below minimum level.
-                        </div>
-                    </c:if>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-lightning"></i> Quick Actions
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm" onclick="addToBill()">
-                            <i class="bi bi-cart-plus"></i> Add to New Bill
-                        </button>
-                        <button class="btn btn-info btn-sm" onclick="viewSalesHistory()">
-                            <i class="bi bi-graph-up"></i> View Sales History
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="duplicateItem()">
-                            <i class="bi bi-files"></i> Duplicate Item
-                        </button>
-                    </div>
-                </div>
-            </div>
 
         
         </div>

@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * Servlet for Bill CRUD operations
@@ -119,10 +120,18 @@ public class BillServlet extends BaseServlet {
         int totalBills = billService.getTotalBillCount();
         int totalPages = (int) Math.ceil((double) totalBills / size);
 
+        // Add dynamic statistics
+        int paidBills = billService.getPaidBillCount();
+        BigDecimal totalRevenue = billService.getTotalRevenue();
+        BigDecimal avgBillAmount = billService.getAverageBillAmount();
+
         request.setAttribute("bills", bills);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalBills", totalBills);
+        request.setAttribute("paidBills", paidBills);
+        request.setAttribute("totalAmount", totalRevenue);
+        request.setAttribute("avgBillAmount", avgBillAmount);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
         forwardToJSP(request, response, "bill/list.jsp");
@@ -242,12 +251,26 @@ public class BillServlet extends BaseServlet {
             String customerAccountNumber = getSanitizedParameter(request, "customerAccountNumber");
             String paymentMethodStr = request.getParameter("paymentMethod");
             String notes = getSanitizedParameter(request, "notes");
+            
+            // Get discount amount from request
+            String discountAmountStr = request.getParameter("discountAmount");
+            BigDecimal discountAmount = BigDecimal.ZERO;
+            if (discountAmountStr != null && !discountAmountStr.trim().isEmpty()) {
+                try {
+                    discountAmount = new BigDecimal(discountAmountStr);
+                    System.out.println("Discount amount: " + discountAmount);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid discount amount format: " + discountAmountStr);
+                    discountAmount = BigDecimal.ZERO;
+                }
+            }
 
             System.out.println("Bill creation details:");
             System.out.println("  Bill Number: " + billNumber);
             System.out.println("  Customer: " + customerAccountNumber);
             System.out.println("  Payment Method: " + paymentMethodStr);
             System.out.println("  Notes: " + notes);
+            System.out.println("  Discount Amount: " + discountAmount);
 
             // Validate customer exists
             Customer customer = customerService.findCustomerByAccountNumber(customerAccountNumber);
@@ -263,6 +286,12 @@ public class BillServlet extends BaseServlet {
             bill.setPaymentMethod(Bill.PaymentMethod.valueOf(paymentMethodStr));
             bill.setNotes(notes);
             bill.setCustomer(customer);
+            
+            // Apply discount to bill
+            if (discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                bill.setDiscountAmount(discountAmount);
+                System.out.println("Discount applied to bill: " + discountAmount);
+            }
 
             // Get bill items from request
             String[] itemIds = request.getParameterValues("itemId[]");
@@ -309,6 +338,13 @@ public class BillServlet extends BaseServlet {
                 showCreateForm(request, response);
                 return;
             }
+
+            // Recalculate bill totals to include discount
+            bill.recalculateAmounts();
+            System.out.println("Bill totals after recalculation:");
+            System.out.println("  Subtotal: " + bill.getSubtotal());
+            System.out.println("  Discount: " + bill.getDiscountAmount());
+            System.out.println("  Total: " + bill.getTotalAmount());
 
             // Create bill
             System.out.println("Calling billService.createBill()");

@@ -11,19 +11,18 @@
   <component name="ChangeListManager">
     <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/BillDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/BillDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/ItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/ItemDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/BillServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/BillServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/BillService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/BillService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/bill/BillServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/bill/BillServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/item/ItemServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/item/ItemServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/ValidationUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/ValidationUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/bill/create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/bill/create.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/bill/list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/bill/list.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/bill/view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/bill/view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/common/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/common/dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/common/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/common/footer.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/common/header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/common/header.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/create.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/create.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/create.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/customer/list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/customer/list.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/edit.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/edit.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/list.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/views/item/view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/item/view.jsp" afterDir="false" />

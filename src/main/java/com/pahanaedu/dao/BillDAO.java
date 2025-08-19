@@ -9,6 +9,7 @@ import com.pahanaedu.util.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * Data Access Object for Bill management
@@ -56,20 +57,21 @@ public class BillDAO {
 
             // Insert bill header
             String billSql = """
-                INSERT INTO bills (bill_number, customer_account_number, total_amount, 
+                INSERT INTO bills (bill_number, customer_account_number, total_amount, discount_amount, 
                                  payment_method, bill_date, created_by, status, notes) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
             try (PreparedStatement billStmt = conn.prepareStatement(billSql)) {
                 billStmt.setString(1, bill.getBillNumber());
                 billStmt.setString(2, bill.getCustomerAccountNumber());
                 billStmt.setBigDecimal(3, bill.getTotalAmount());
-                billStmt.setString(4, bill.getPaymentMethod().name());
-                billStmt.setTimestamp(5, bill.getBillDate());
-                billStmt.setString(6, bill.getCreatedBy());
-                billStmt.setString(7, bill.getStatus().name());
-                billStmt.setString(8, bill.getNotes());
+                billStmt.setBigDecimal(4, bill.getDiscountAmount());
+                billStmt.setString(5, bill.getPaymentMethod().name());
+                billStmt.setTimestamp(6, bill.getBillDate());
+                billStmt.setString(7, bill.getCreatedBy());
+                billStmt.setString(8, bill.getStatus().name());
+                billStmt.setString(9, bill.getNotes());
 
                 System.out.println("  Inserting bill header...");
                 int billResult = billStmt.executeUpdate();
@@ -148,7 +150,7 @@ public class BillDAO {
      */
     public Bill findByBillNumber(String billNumber) {
         String sql = """
-            SELECT bill_number, customer_account_number, total_amount, payment_method, 
+            SELECT bill_number, customer_account_number, total_amount, discount_amount, payment_method, 
                    bill_date, created_by, status, notes 
             FROM bills 
             WHERE bill_number = ?
@@ -188,7 +190,7 @@ public class BillDAO {
     public List<Bill> getBillsByCustomer(String customerAccountNumber) {
         List<Bill> bills = new ArrayList<>();
         String sql = """
-            SELECT bill_number, customer_account_number, total_amount, payment_method, 
+            SELECT bill_number, customer_account_number, total_amount, discount_amount, payment_method, 
                    bill_date, created_by, status, notes 
             FROM bills 
             WHERE customer_account_number = ? 
@@ -226,7 +228,7 @@ public class BillDAO {
     public List<Bill> getAllBills(int limit, int offset) {
         List<Bill> bills = new ArrayList<>();
         String sql = """
-            SELECT bill_number, customer_account_number, total_amount, payment_method, 
+            SELECT bill_number, customer_account_number, total_amount, discount_amount, payment_method, 
                    bill_date, created_by, status, notes 
             FROM bills 
             ORDER BY bill_date DESC 
@@ -399,7 +401,8 @@ public class BillDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             if (rs.next()) {
-                int maxId = rs.getInt("max_id");
+                // Use getLong instead of getInt to handle larger numbers
+                long maxId = rs.getLong("max_id");
                 return String.format("BILL%06d", maxId + 1);
             }
 
@@ -420,7 +423,7 @@ public class BillDAO {
     public List<Bill> getBillsByDateRange(Date startDate, Date endDate) {
         List<Bill> bills = new ArrayList<>();
         String sql = """
-            SELECT bill_number, customer_account_number, total_amount, payment_method, 
+            SELECT bill_number, customer_account_number, total_amount, discount_amount, payment_method, 
                    bill_date, created_by, status, notes 
             FROM bills 
             WHERE DATE(bill_date) BETWEEN ? AND ? 
@@ -473,6 +476,75 @@ public class BillDAO {
     }
 
     /**
+     * Get paid bill count
+     *
+     * @return Total number of paid bills
+     */
+    public int getPaidBillCount() {
+        String sql = "SELECT COUNT(*) FROM bills WHERE status = 'PAID'";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting paid bill count: " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get total revenue from all paid bills
+     *
+     * @return Total revenue amount
+     */
+    public BigDecimal getTotalRevenue() {
+        String sql = "SELECT COALESCE(SUM(total_amount), 0) FROM bills WHERE status = 'PAID'";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getBigDecimal(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting total revenue: " + e.getMessage());
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    /**
+     * Get average bill amount from all bills
+     *
+     * @return Average bill amount
+     */
+    public BigDecimal getAverageBillAmount() {
+        String sql = "SELECT COALESCE(AVG(total_amount), 0) FROM bills";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getBigDecimal(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getting average bill amount: " + e.getMessage());
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    /**
      * Create Bill object from ResultSet
      *
      * @param rs ResultSet containing bill data
@@ -485,6 +557,7 @@ public class BillDAO {
         bill.setBillNumber(rs.getString("bill_number"));
         bill.setCustomerAccountNumber(rs.getString("customer_account_number"));
         bill.setTotalAmount(rs.getBigDecimal("total_amount"));
+        bill.setDiscountAmount(rs.getBigDecimal("discount_amount"));
         bill.setPaymentMethod(Bill.PaymentMethod.valueOf(rs.getString("payment_method")));
         bill.setBillDate(rs.getTimestamp("bill_date"));
         bill.setCreatedBy(rs.getString("created_by"));
