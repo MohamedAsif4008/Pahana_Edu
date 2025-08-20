@@ -14,8 +14,7 @@
 <footer class="bg-light text-center py-3 mt-5">
     <div class="container">
         <p class="text-muted mb-0">
-            &copy; 2024 Pahana Edu Billing System.
-            <span class="text-primary">Advanced Programming Project</span>
+            &copy; 2024 Pahana Edu Billing System
         </p>
     </div>
 </footer>

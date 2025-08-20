@@ -81,7 +81,7 @@
                                     </td>
                                     <td>
                                         <div>
-                                            <strong>${item.itemName}</strong>
+                                            <strong>${item.name}</strong>
                                             <c:if test="${not empty item.description}">
                                                 <br><small class="text-muted">${item.description}</small>
                                             </c:if>
@@ -117,7 +117,7 @@
                                                 <button type="button"
                                                         class="btn btn-outline-danger"
                                                         title="Delete"
-                                                        onclick="confirmDelete('${item.itemId}', '${item.itemName}')">
+                                                        onclick="confirmDelete('${item.itemId}', '${item.name}')">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </c:if>
@@ -188,82 +188,6 @@
         </div>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="row mt-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body text-center">
-                    <i class="bi bi-box-seam" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">${totalItems != null ? totalItems : 0}</h4>
-                    <p class="mb-0">Total Items</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body text-center">
-                    <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">${inStockItems != null ? inStockItems : 0}</h4>
-                    <p class="mb-0">In Stock</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body text-center">
-                    <i class="bi bi-exclamation-triangle" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">${lowStockItems != null ? lowStockItems : 0}</h4>
-                    <p class="mb-0">Low Stock</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body text-center">
-                    <i class="bi bi-currency-dollar" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">Rs. ${totalValue != null ? totalValue : '0'}</h4>
-                    <p class="mb-0">Total Value</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-plus-circle text-primary" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">Add Item</h6>
-                    <a href="${pageContext.request.contextPath}/items?action=create" class="btn btn-sm btn-primary">
-                        Create New
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-upload text-success" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">Import Items</h6>
-                    <button class="btn btn-sm btn-success" onclick="importItems()">
-                        Upload CSV
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-download text-info" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">Export Items</h6>
-                    <button class="btn btn-sm btn-info" onclick="exportItems()">
-                        Download CSV
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <jsp:include page="../common/footer.jsp" />
@@ -271,19 +195,19 @@
 <script>
     // Delete confirmation
     function confirmDelete(itemId, itemName) {
-        if (confirm(`Are you sure you want to delete item "${itemName}" (${itemId})?\n\nThis action cannot be undone.`)) {
-            const form = document.createElement('form');
+        if (confirm('Are you sure you want to delete item "' + itemName + '" (' + itemId + ')?\n\nThis action will deactivate the item.')) {
+            var form = document.createElement('form');
             form.method = 'POST';
             form.action = '${pageContext.request.contextPath}/items';
 
-            const actionInput = document.createElement('input');
+            var actionInput = document.createElement('input');
             actionInput.type = 'hidden';
             actionInput.name = 'action';
             actionInput.value = 'delete';
 
-            const idInput = document.createElement('input');
+            var idInput = document.createElement('input');
             idInput.type = 'hidden';
-            idInput.name = 'id';
+            idInput.name = 'itemId';  // Changed from 'id' to 'itemId'
             idInput.value = itemId;
 
             form.appendChild(actionInput);

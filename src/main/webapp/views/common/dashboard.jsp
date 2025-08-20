@@ -94,26 +94,22 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <a href="/Pahana_Edu/customers?action=create" class="btn btn-primary w-100 mb-2">
                             <i class="bi bi-person-plus"></i> Add Customer
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <a href="/Pahana_Edu/items?action=create" class="btn btn-success w-100 mb-2">
                             <i class="bi bi-plus-square"></i> Add Item
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <a href="/Pahana_Edu/bills?action=create" class="btn btn-info w-100 mb-2">
                             <i class="bi bi-plus-circle"></i> Create Bill
                         </a>
                     </div>
-                    <div class="col-md-3">
-                        <a href="/Pahana_Edu/reports" class="btn btn-warning w-100 mb-2">
-                            <i class="bi bi-graph-up"></i> View Reports
-                        </a>
-                    </div>
+                
                 </div>
             </div>
         </div>
@@ -170,56 +166,14 @@
                             <i class="bi bi-receipt"></i> View Bills
                         </a>
                     </li>
-                    <li>
-                        <a href="/Pahana_Edu/profile" class="text-decoration-none">
-                            <i class="bi bi-person-gear"></i> My Profile
-                        </a>
-                    </li>
+                 
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Admin Tools (only for admin users) -->
-<c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-gear"></i> Admin Tools
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Additional management options:</p>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a href="/Pahana_Edu/users" class="btn btn-outline-dark w-100">
-                                <i class="bi bi-people"></i> Manage Users
-                            </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="/Pahana_Edu/reports" class="btn btn-outline-dark w-100">
-                                <i class="bi bi-graph-up"></i> View Reports
-                            </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="/Pahana_Edu/settings" class="btn btn-outline-dark w-100">
-                                <i class="bi bi-gear"></i> System Settings
-                            </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="/Pahana_Edu/backup" class="btn btn-outline-dark w-100">
-                                <i class="bi bi-download"></i> Backup Data
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</c:if>
+
 
 </div> <!-- End main-content -->
 </div> <!-- End row -->

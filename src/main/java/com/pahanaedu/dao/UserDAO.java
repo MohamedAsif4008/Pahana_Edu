@@ -406,11 +406,6 @@ public class UserDAO {
         return user;
     }
 
-    /**
-     * Generate next user ID
-     *
-     * @return Next available user ID
-     */
     public String generateNextUserId() {
         String sql = "SELECT MAX(CAST(SUBSTRING(user_id, 4) AS UNSIGNED)) as max_id FROM users WHERE user_id LIKE 'USR%'";
 

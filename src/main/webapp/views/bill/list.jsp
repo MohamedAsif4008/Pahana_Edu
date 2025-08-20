@@ -111,10 +111,7 @@
                                                class="btn btn-outline-info" title="View & Print">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="${pageContext.request.contextPath}/bills?action=print&id=${bill.billNumber}"
-                                               class="btn btn-outline-success" title="Print Bill" target="_blank">
-                                                <i class="bi bi-printer"></i>
-                                            </a>
+                                            
                                             <c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
                                                 <button type="button"
                                                         class="btn btn-outline-danger"
@@ -214,7 +211,7 @@
             <div class="card bg-info text-white">
                 <div class="card-body text-center">
                     <i class="bi bi-currency-dollar" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">Rs. ${totalAmount != null ? totalAmount : '0'}</h4>
+                    <h4 class="mt-2">Rs. <fmt:formatNumber value="${totalAmount != null ? totalAmount : 0}" pattern="#,##0.00"/></h4>
                     <p class="mb-0">Total Revenue</p>
                 </div>
             </div>
@@ -223,49 +220,13 @@
             <div class="card bg-warning text-white">
                 <div class="card-body text-center">
                     <i class="bi bi-graph-up" style="font-size: 2rem;"></i>
-                    <h4 class="mt-2">Rs. ${avgBillAmount != null ? avgBillAmount : '0'}</h4>
+                    <h4 class="mt-2">Rs. <fmt:formatNumber value="${avgBillAmount != null ? avgBillAmount : 0}" pattern="#,##0.00"/></h4>
                     <p class="mb-0">Avg. Bill Amount</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-plus-circle text-primary" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">New Bill</h6>
-                    <a href="${pageContext.request.contextPath}/bills?action=create" class="btn btn-sm btn-primary">
-                        Create Bill
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-download text-success" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">Export Bills</h6>
-                    <button class="btn btn-sm btn-success" onclick="exportBills()">
-                        Download CSV
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <i class="bi bi-graph-up text-info" style="font-size: 2rem;"></i>
-                    <h6 class="mt-2">Sales Report</h6>
-                    <a href="${pageContext.request.contextPath}/reports?type=sales" class="btn btn-sm btn-info">
-                        View Report
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <jsp:include page="../common/footer.jsp" />

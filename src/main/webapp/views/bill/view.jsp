@@ -62,12 +62,9 @@
                         <div class="col-md-6">
                             <h6 class="text-primary">To:</h6>
                             <address>
-                                <strong>${bill.customer.fullName}</strong><br>
+                                <strong>${bill.customer.name}</strong><br>
                                 Account: ${bill.customer.accountNumber}<br>
                                 ${bill.customer.address}<br>
-                                <c:if test="${not empty bill.customer.city}">
-                                    ${bill.customer.city}<br>
-                                </c:if>
                                 <abbr title="Phone">P:</abbr> ${bill.customer.phoneNumber}<br>
                                 <c:if test="${not empty bill.customer.email}">
                                     <abbr title="Email">E:</abbr> ${bill.customer.email}
@@ -108,10 +105,7 @@
                                         </span>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td><strong>Created By:</strong></td>
-                                    <td>${bill.createdByUser.fullName}</td>
-                                </tr>
+                                
                                 <c:if test="${not empty bill.notes}">
                                     <tr>
                                         <td><strong>Notes:</strong></td>
@@ -141,7 +135,7 @@
                                     <td>${status.index + 1}</td>
                                     <td>
                                         <strong>${item.item.itemId}</strong><br>
-                                        <small class="text-muted">${item.item.itemName}</small>
+                                        <small class="text-muted">${item.item.name}</small>
                                     </td>
                                     <td>
                                         <small>${item.item.description}</small>
@@ -205,7 +199,7 @@
                             <div class="text-center">
                                 <p class="mb-1"><strong>Thank you for your business!</strong></p>
                                 <p class="text-muted small mb-0">
-                                    Generated on <fmt:formatDate value="${bill.billDate}" pattern="MMM dd, yyyy HH:mm"/> by ${bill.createdByUser.fullName}
+                                    Generated on <fmt:formatDate value="${bill.billDate}" pattern="MMM dd, yyyy HH:mm"/> 
                                 </p>
                             </div>
                         </div>
@@ -216,30 +210,7 @@
 
         <!-- Side Panel -->
         <div class="col-md-4">
-            <!-- Bill Actions -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-lightning"></i> Bill Actions
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-success" onclick="printBill()">
-                            <i class="bi bi-printer"></i> Print Bill
-                        </button>
-                        <button class="btn btn-info" onclick="downloadPDF()">
-                            <i class="bi bi-file-pdf"></i> Download PDF
-                        </button>
-                        <button class="btn btn-warning" onclick="emailBill()">
-                            <i class="bi bi-envelope"></i> Email to Customer
-                        </button>
-                        <button class="btn btn-secondary" onclick="duplicateBill()">
-                            <i class="bi bi-files"></i> Duplicate Bill
-                        </button>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Bill Summary -->
             <div class="card mt-3">
@@ -290,59 +261,7 @@
                 </div>
             </div>
 
-            <!-- Customer Quick Info -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-person-circle"></i> Customer Info
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="text-center mb-3">
-                        <h6>${bill.customer.fullName}</h6>
-                        <small class="text-muted">${bill.customer.accountNumber}</small>
-                    </div>
 
-                    <div class="d-grid gap-2">
-                        <a href="${pageContext.request.contextPath}/customers?action=view&id=${bill.customer.accountNumber}"
-                           class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-person"></i> View Customer
-                        </a>
-                        <a href="${pageContext.request.contextPath}/bills?customer=${bill.customer.accountNumber}"
-                           class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-receipt"></i> Customer Bills
-                        </a>
-                        <button class="btn btn-outline-success btn-sm" onclick="createNewBillForCustomer()">
-                            <i class="bi bi-plus-circle"></i> New Bill
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Related Bills -->
-            <c:if test="${not empty relatedBills}">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-collection"></i> Recent Bills
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <c:forEach items="${relatedBills}" var="relatedBill" end="3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <small><strong>${relatedBill.billNumber}</strong></small><br>
-                                    <small class="text-muted">Rs. ${relatedBill.totalAmount}</small>
-                                </div>
-                                <a href="${pageContext.request.contextPath}/bills?action=view&id=${relatedBill.billNumber}"
-                                   class="btn btn-sm btn-outline-primary">
-                                    View
-                                </a>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </div>
-            </c:if>
         </div>
     </div>
 </div>

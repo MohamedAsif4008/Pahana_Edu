@@ -55,14 +55,14 @@
 
                             <!-- Item Name -->
                             <div class="col-md-6 mb-3">
-                                <label for="itemName" class="form-label">
+                                <label for="name" class="form-label">
                                     <i class="bi bi-tag"></i> Item Name *
                                 </label>
                                 <input type="text"
                                        class="form-control"
-                                       id="itemName"
-                                       name="itemName"
-                                       value="${param.itemName}"
+                                       id="name"
+                                       name="name"
+                                       value="${param.name}"
                                        placeholder="Enter item name"
                                        required>
                             </div>
@@ -143,18 +143,7 @@
                                           placeholder="Enter item description (optional)">${param.description}</textarea>
                             </div>
 
-                            <!-- Supplier -->
-                            <div class="col-md-6 mb-3">
-                                <label for="supplier" class="form-label">
-                                    <i class="bi bi-building"></i> Supplier
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="supplier"
-                                       name="supplier"
-                                       value="${param.supplier}"
-                                       placeholder="Supplier name">
-                            </div>
+      
 
                             <!-- Status -->
                             <div class="col-md-6 mb-3">
@@ -277,12 +266,12 @@
     // Form validation
     document.getElementById('itemForm').addEventListener('submit', function(e) {
         const itemId = document.getElementById('itemId').value.trim();
-        const itemName = document.getElementById('itemName').value.trim();
+        const name = document.getElementById('name').value.trim();
         const category = document.getElementById('category').value;
         const price = document.getElementById('price').value;
         const stockQuantity = document.getElementById('stockQuantity').value;
 
-        if (!itemId || !itemName || !category || !price || !stockQuantity) {
+        if (!itemId || !name || !category || !price || !stockQuantity) {
             e.preventDefault();
             alert('Please fill in all required fields marked with *');
             return false;
@@ -316,15 +305,15 @@
         const formData = new FormData(document.getElementById('itemForm'));
         let preview = 'Item Preview:\n\n';
 
-        preview += `Item ID: ${formData.get('itemId')}\n`;
-        preview += `Name: ${formData.get('itemName')}\n`;
-        preview += `Category: ${formData.get('category')}\n`;
-        preview += `Price: Rs. ${formData.get('price')}\n`;
-        preview += `Stock: ${formData.get('stockQuantity')} units\n`;
-        preview += `Min Stock: ${formData.get('minStockLevel')}\n`;
-        preview += `Supplier: ${formData.get('supplier')}\n`;
-        preview += `Status: ${formData.get('active') === 'true' ? 'Active' : 'Inactive'}\n`;
-        preview += `Description: ${formData.get('description')}`;
+        // Use string concatenation instead of template literals to avoid JSP EL conflicts
+        preview += 'Item ID: ' + formData.get('itemId') + '\n';
+        preview += 'Name: ' + formData.get('itemName') + '\n';
+        preview += 'Category: ' + formData.get('category') + '\n';
+        preview += 'Price: Rs. ' + formData.get('price') + '\n';
+        preview += 'Stock: ' + formData.get('stockQuantity') + ' units\n';
+        preview += 'Min Stock: ' + formData.get('minStockLevel') + '\n';
+        preview += 'Status: ' + (formData.get('active') === 'true' ? 'Active' : 'Inactive') + '\n';
+        preview += 'Description: ' + formData.get('description');
 
         alert(preview);
     }
@@ -334,13 +323,12 @@
         const timestamp = Date.now().toString().slice(-4);
 
         document.getElementById('itemId').value = 'BOOK' + timestamp;
-        document.getElementById('itemName').value = 'Advanced Programming Guide';
+        document.getElementById('name').value = 'Advanced Programming Guide';
         document.getElementById('category').value = 'Books';
         document.getElementById('price').value = '2500.00';
         document.getElementById('stockQuantity').value = '20';
         document.getElementById('minStockLevel').value = '5';
         document.getElementById('description').value = 'Comprehensive guide for advanced programming concepts and best practices.';
-        document.getElementById('supplier').value = 'Educational Publishers Ltd';
         document.getElementById('active').value = 'true';
     }
 
@@ -349,13 +337,12 @@
         const timestamp = Date.now().toString().slice(-4);
 
         document.getElementById('itemId').value = 'STAT' + timestamp;
-        document.getElementById('itemName').value = 'Premium Notebook Set';
+        document.getElementById('name').value = 'Premium Notebook Set';
         document.getElementById('category').value = 'Stationery';
         document.getElementById('price').value = '450.00';
         document.getElementById('stockQuantity').value = '50';
         document.getElementById('minStockLevel').value = '10';
         document.getElementById('description').value = 'High-quality notebook set with ruled pages, perfect for students.';
-        document.getElementById('supplier').value = 'Office Supplies Co';
         document.getElementById('active').value = 'true';
     }
 
@@ -378,7 +365,7 @@
     }
 
     // Auto-generate item ID suggestion
-    document.getElementById('itemName').addEventListener('blur', function() {
+    document.getElementById('name').addEventListener('blur', function() {
         const itemIdField = document.getElementById('itemId');
         const category = document.getElementById('category').value;
 

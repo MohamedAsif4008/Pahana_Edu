@@ -26,21 +26,11 @@ public class DatabaseConnection {
     private String dbPassword;
     private String dbDriver;
 
-    /**
-     * Private constructor to prevent instantiation (Singleton pattern)
-     * Loads database configuration from properties file
-     */
     private DatabaseConnection() {
         loadDatabaseConfig();
         initializeDriver();
     }
 
-    /**
-     * Thread-safe singleton instance retrieval
-     * Double-checked locking pattern for performance
-     *
-     * @return DatabaseConnection singleton instance
-     */
     public static DatabaseConnection getInstance() {
         if (instance == null) {
             synchronized (lock) {
@@ -52,10 +42,7 @@ public class DatabaseConnection {
         return instance;
     }
 
-    /**
-     * Load database configuration from properties file
-     * Demonstrates proper exception handling
-     */
+
     private void loadDatabaseConfig() {
         Properties properties = new Properties();
 

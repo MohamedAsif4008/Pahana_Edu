@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <form action="${pageContext.request.contextPath}/items" method="post" id="editItemForm">
                         <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="id" value="${item.itemId}">
+                        <input type="hidden" name="itemId" value="${item.itemId}">
 
                         <div class="row">
                             <!-- Item ID (Read-only) -->
@@ -58,14 +58,14 @@
 
                             <!-- Item Name -->
                             <div class="col-md-6 mb-3">
-                                <label for="itemName" class="form-label">
+                                <label for="name" class="form-label">
                                     <i class="bi bi-tag"></i> Item Name *
                                 </label>
                                 <input type="text"
                                        class="form-control"
-                                       id="itemName"
-                                       name="itemName"
-                                       value="${item.itemName}"
+                                       id="name"
+                                       name="name"
+                                       value="${item.name}"
                                        required>
                             </div>
 
@@ -117,14 +117,14 @@
 
                             <!-- Minimum Stock Level -->
                             <div class="col-md-6 mb-3">
-                                <label for="minStockLevel" class="form-label">
+                                <label for="reorderLevel" class="form-label">
                                     <i class="bi bi-exclamation-triangle"></i> Minimum Stock Level
                                 </label>
                                 <input type="number"
                                        class="form-control"
-                                       id="minStockLevel"
-                                       name="minStockLevel"
-                                       value="${item.minStockLevel}"
+                                       id="reorderLevel"
+                                       name="reorderLevel"
+                                       value="${item.reorderLevel}"
                                        min="0"
                                        step="1">
                             </div>
@@ -140,17 +140,7 @@
                                           rows="3">${item.description}</textarea>
                             </div>
 
-                            <!-- Supplier -->
-                            <div class="col-md-6 mb-3">
-                                <label for="supplier" class="form-label">
-                                    <i class="bi bi-building"></i> Supplier
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="supplier"
-                                       name="supplier"
-                                       value="${item.supplier}">
-                            </div>
+                        
 
                             <!-- Status -->
                             <div class="col-md-6 mb-3">
@@ -173,9 +163,7 @@
                                         <i class="bi bi-arrow-clockwise"></i> Reset Changes
                                     </button>
                                     <div>
-                                        <button type="button" class="btn btn-outline-primary me-2" onclick="previewChanges()">
-                                            <i class="bi bi-eye"></i> Preview Changes
-                                        </button>
+                                        
                                         <button type="submit" class="btn btn-success">
                                             <i class="bi bi-check-circle"></i> Update Item
                                         </button>
@@ -199,7 +187,7 @@
                 <div class="card-body">
                     <div class="text-center mb-3">
                         <i class="bi bi-box-seam text-primary" style="font-size: 3rem;"></i>
-                        <h6 class="mt-2">${item.itemName}</h6>
+                        <h6 class="mt-2">${item.name}</h6>
                         <span class="badge bg-${item.active ? 'success' : 'danger'}">
                             ${item.active ? 'Active' : 'Inactive'}
                         </span>
@@ -226,10 +214,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr>
-                            <td><strong>Supplier:</strong></td>
-                            <td><small>${item.supplier}</small></td>
-                        </tr>
+                    
                         <c:if test="${not empty item.createdDate}">
                             <tr>
                                 <td><strong>Added:</strong></td>
@@ -240,79 +225,8 @@
                 </div>
             </div>
 
-            <!-- Stock Management -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-boxes"></i> Stock Management
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label small">Quick Stock Update:</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="stockAdjustment" placeholder="0">
-                            <button class="btn btn-outline-success" onclick="adjustStock(1)">
-                                <i class="bi bi-plus"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="adjustStock(-1)">
-                                <i class="bi bi-dash"></i>
-                            </button>
-                        </div>
-                    </div>
 
-                    <c:if test="${item.stockQuantity <= item.minStockLevel}">
-                        <div class="alert alert-warning alert-sm">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            <strong>Low Stock Alert!</strong><br>
-                            Current stock is at or below minimum level.
-                        </div>
-                    </c:if>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-lightning"></i> Quick Actions
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary btn-sm" onclick="addToBill()">
-                            <i class="bi bi-cart-plus"></i> Add to New Bill
-                        </button>
-                        <button class="btn btn-info btn-sm" onclick="viewSalesHistory()">
-                            <i class="bi bi-graph-up"></i> View Sales History
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="duplicateItem()">
-                            <i class="bi bi-files"></i> Duplicate Item
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Edit History (if available) -->
-            <c:if test="${not empty item.lastModifiedDate}">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-clock-history"></i> Last Updated
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="small mb-1">
-                            <strong>Date:</strong> <fmt:formatDate value="${item.lastModifiedDate}" pattern="MMM dd, yyyy HH:mm"/>
-                        </p>
-                        <c:if test="${not empty item.lastModifiedBy}">
-                            <p class="small mb-0">
-                                <strong>By:</strong> ${item.lastModifiedBy}
-                            </p>
-                        </c:if>
-                    </div>
-                </div>
-            </c:if>
+        
         </div>
     </div>
 </div>
@@ -322,24 +236,23 @@
 <script>
     // Store original values for reset functionality
     const originalValues = {
-        itemName: '${item.itemName}',
+        name: '${item.name}',
         category: '${item.category}',
         price: '${item.price}',
         stockQuantity: '${item.stockQuantity}',
-        minStockLevel: '${item.minStockLevel}',
+        reorderLevel: '${item.reorderLevel}',
         description: '${item.description}',
-        supplier: '${item.supplier}',
         active: '${item.active}'
     };
 
     // Form validation
     document.getElementById('editItemForm').addEventListener('submit', function(e) {
-        const itemName = document.getElementById('itemName').value.trim();
+        const name = document.getElementById('name').value.trim();
         const category = document.getElementById('category').value;
         const price = document.getElementById('price').value;
         const stockQuantity = document.getElementById('stockQuantity').value;
 
-        if (!itemName || !category || !price || stockQuantity === '') {
+        if (!name || !category || !price || stockQuantity === '') {
             e.preventDefault();
             alert('Please fill in all required fields marked with *');
             return false;
@@ -362,11 +275,11 @@
     // Reset to original values
     function resetToOriginal() {
         if (confirm('Are you sure you want to reset all changes?')) {
-            document.getElementById('itemName').value = originalValues.itemName;
+            document.getElementById('name').value = originalValues.name;
             document.getElementById('category').value = originalValues.category;
             document.getElementById('price').value = originalValues.price;
             document.getElementById('stockQuantity').value = originalValues.stockQuantity;
-            document.getElementById('minStockLevel').value = originalValues.minStockLevel;
+            document.getElementById('reorderLevel').value = originalValues.reorderLevel;
             document.getElementById('description').value = originalValues.description;
             document.getElementById('supplier').value = originalValues.supplier;
             document.getElementById('active').value = originalValues.active;
@@ -377,8 +290,8 @@
     function previewChanges() {
         const changes = [];
 
-        if (document.getElementById('itemName').value !== originalValues.itemName) {
-            changes.push(`Name: "${originalValues.itemName}" → "${document.getElementById('itemName').value}"`);
+        if (document.getElementById('name').value !== originalValues.name) {
+            changes.push(`Name: "${originalValues.name}" → "${document.getElementById('name').value}"`);
         }
         if (document.getElementById('category').value !== originalValues.category) {
             changes.push(`Category: "${originalValues.category}" → "${document.getElementById('category').value}"`);
@@ -389,8 +302,8 @@
         if (document.getElementById('stockQuantity').value !== originalValues.stockQuantity) {
             changes.push(`Stock: ${originalValues.stockQuantity} → ${document.getElementById('stockQuantity').value}`);
         }
-        if (document.getElementById('minStockLevel').value !== originalValues.minStockLevel) {
-            changes.push(`Min Stock: ${originalValues.minStockLevel} → ${document.getElementById('minStockLevel').value}`);
+        if (document.getElementById('reorderLevel').value !== originalValues.reorderLevel) {
+            changes.push(`Min Stock: ${originalValues.reorderLevel} → ${document.getElementById('reorderLevel').value}`);
         }
         if (document.getElementById('supplier').value !== originalValues.supplier) {
             changes.push(`Supplier: "${originalValues.supplier}" → "${document.getElementById('supplier').value}"`);
@@ -442,7 +355,7 @@
 
     // Focus on first editable field when page loads
     window.addEventListener('load', function() {
-        document.getElementById('itemName').focus();
+        document.getElementById('name').focus();
     });
 
     // Mark form as dirty when changes are made

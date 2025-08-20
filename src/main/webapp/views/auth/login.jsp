@@ -148,32 +148,16 @@
                             </button>
                         </div>
 
-                        <!-- Additional Options -->
-                        <div class="text-center">
-                            <small class="text-muted">
-                                <a href="${pageContext.request.contextPath}/forgot-password" class="text-decoration-none">
-                                    Forgot your password?
-                                </a>
-                            </small>
-                        </div>
 
-                        <!-- Demo Credentials Info -->
-                        <div class="mt-4 p-3 bg-light rounded">
-                            <h6 class="text-muted mb-2">
-                                <i class="bi bi-info-circle"></i> Demo Credentials
-                            </h6>
-                            <small class="text-muted">
-                                <strong>Admin:</strong> admin / admin123<br>
-                                <strong>Staff:</strong> staff / staff123
-                            </small>
-                        </div>
+
+
                     </form>
                 </div>
 
                 <!-- Footer -->
                 <div class="bg-light text-center py-3">
                     <small class="text-muted">
-                        &copy; 2024 Pahana Edu. Advanced Programming Project.
+                        &copy; 2024 Pahana Edu.
                     </small>
                 </div>
             </div>

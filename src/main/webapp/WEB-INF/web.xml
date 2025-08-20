@@ -7,6 +7,12 @@
 
   <display-name>Pahana Edu Billing System</display-name>
 
+  <!-- Application Initializer Listener -->
+  <!-- <listener>
+    <listener-class>com.pahanaedu.util.ApplicationInitializer</listener-class>
+  </listener> -->
+
+
   <!-- JSP Configuration to ensure EL is enabled -->
   <jsp-config>
     <jsp-property-group>
@@ -20,5 +26,21 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+
+  <!-- Error Pages Configuration -->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/views/common/error.jsp</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/views/common/error.jsp</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/views/common/error.jsp</location>
+  </error-page>
 
 </web-app>

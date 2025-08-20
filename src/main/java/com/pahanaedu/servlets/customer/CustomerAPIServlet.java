@@ -42,12 +42,6 @@ public class CustomerAPIServlet extends BaseServlet {
         this.customerService = new CustomerServiceImpl();
     }
 
-    /**
-     * Handle GET requests - Retrieve customers
-     * GET /api/customers - Get all customers
-     * GET /api/customers/{accountNumber} - Get specific customer
-     * GET /api/customers?search={term} - Search customers
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -77,10 +71,7 @@ public class CustomerAPIServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Handle POST requests - Create new customer
-     * POST /api/customers - Create customer
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -127,10 +118,6 @@ public class CustomerAPIServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Handle PUT requests - Update customer
-     * PUT /api/customers/{accountNumber} - Update customer
-     */
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -203,10 +190,7 @@ public class CustomerAPIServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Handle DELETE requests - Delete (deactivate) customer
-     * DELETE /api/customers/{accountNumber} - Delete customer
-     */
+
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

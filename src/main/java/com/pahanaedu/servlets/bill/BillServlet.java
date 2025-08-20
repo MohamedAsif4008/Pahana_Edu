@@ -4,6 +4,7 @@ import com.pahanaedu.models.Bill;
 import com.pahanaedu.models.BillItem;
 import com.pahanaedu.models.Customer;
 import com.pahanaedu.models.Item;
+import com.pahanaedu.models.User;
 import com.pahanaedu.service.interfaces.BillService;
 import com.pahanaedu.service.interfaces.CustomerService;
 import com.pahanaedu.service.interfaces.ItemService;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * Servlet for Bill CRUD operations
@@ -64,6 +66,9 @@ public class BillServlet extends BaseServlet {
                 case "print":
                     printBill(request, response);
                     break;
+                case "edit":
+                    showEditForm(request, response);
+                    break;
                 default:
                     showBillList(request, response);
             }
@@ -91,6 +96,9 @@ public class BillServlet extends BaseServlet {
                 case "cancel":
                     cancelBill(request, response);
                     break;
+                case "delete":
+                    deleteBill(request, response);
+                    break;
                 default:
                     setErrorMessage(request, "Invalid action");
                     showBillList(request, response);
@@ -112,13 +120,21 @@ public class BillServlet extends BaseServlet {
         int totalBills = billService.getTotalBillCount();
         int totalPages = (int) Math.ceil((double) totalBills / size);
 
+        // Add dynamic statistics
+        int paidBills = billService.getPaidBillCount();
+        BigDecimal totalRevenue = billService.getTotalRevenue();
+        BigDecimal avgBillAmount = billService.getAverageBillAmount();
+
         request.setAttribute("bills", bills);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalBills", totalBills);
+        request.setAttribute("paidBills", paidBills);
+        request.setAttribute("totalAmount", totalRevenue);
+        request.setAttribute("avgBillAmount", avgBillAmount);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "bill/bill-list.jsp");
+        forwardToJSP(request, response, "bill/list.jsp");
     }
 
     private void showBillDetails(HttpServletRequest request, HttpServletResponse response)
@@ -140,7 +156,7 @@ public class BillServlet extends BaseServlet {
 
         request.setAttribute("bill", bill);
         request.setAttribute("billItems", bill.getBillItems());
-        forwardToJSP(request, response, "bill/bill-details.jsp");
+        forwardToJSP(request, response, "bill/view.jsp");
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
@@ -155,7 +171,42 @@ public class BillServlet extends BaseServlet {
         request.setAttribute("items", items);
         request.setAttribute("csrfToken", generateCSRFToken(request));
 
-        forwardToJSP(request, response, "bill/bill-create.jsp");
+        forwardToJSP(request, response, "bill/create.jsp");
+    }
+
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String billNumber = getSanitizedParameter(request, PARAM_ID);
+        if (!ValidationUtils.isValidBillNumber(billNumber)) {
+            setErrorMessage(request, "Invalid bill number");
+            showBillList(request, response);
+            return;
+        }
+
+        Bill bill = billService.findBillByNumber(billNumber);
+        if (bill == null) {
+            setErrorMessage(request, "Bill not found");
+            showBillList(request, response);
+            return;
+        }
+
+        // Check if bill can be edited (only PENDING status bills)
+        if (!"PENDING".equals(bill.getStatus().toString())) {
+            setErrorMessage(request, "Only pending bills can be edited");
+            showBillDetails(request, response);
+            return;
+        }
+
+        List<Customer> customers = customerService.getAllActiveCustomers();
+        List<Item> items = itemService.getAllActiveItems();
+
+        request.setAttribute("bill", bill);
+        request.setAttribute("customers", customers);
+        request.setAttribute("items", items);
+        request.setAttribute("csrfToken", generateCSRFToken(request));
+
+        forwardToJSP(request, response, "bill/edit.jsp");
     }
 
     private void printBill(HttpServletRequest request, HttpServletResponse response)
@@ -180,7 +231,16 @@ public class BillServlet extends BaseServlet {
     private void createBill(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        System.out.println("=== createBill() called ===");
+        
+        // Log all request parameters
+        System.out.println("Request parameters:");
+        request.getParameterMap().forEach((key, values) -> {
+            System.out.println("  " + key + ": " + String.join(", ", values));
+        });
+
         if (!validateRequiredParams(request, "customerAccountNumber", "paymentMethod")) {
+            System.out.println("Validation failed - missing required parameters");
             setErrorMessage(request, "Customer and payment method are required");
             showCreateForm(request, response);
             return;
@@ -191,9 +251,30 @@ public class BillServlet extends BaseServlet {
             String customerAccountNumber = getSanitizedParameter(request, "customerAccountNumber");
             String paymentMethodStr = request.getParameter("paymentMethod");
             String notes = getSanitizedParameter(request, "notes");
+            
+            // Get discount amount from request
+            String discountAmountStr = request.getParameter("discountAmount");
+            BigDecimal discountAmount = BigDecimal.ZERO;
+            if (discountAmountStr != null && !discountAmountStr.trim().isEmpty()) {
+                try {
+                    discountAmount = new BigDecimal(discountAmountStr);
+                    System.out.println("Discount amount: " + discountAmount);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid discount amount format: " + discountAmountStr);
+                    discountAmount = BigDecimal.ZERO;
+                }
+            }
+
+            System.out.println("Bill creation details:");
+            System.out.println("  Bill Number: " + billNumber);
+            System.out.println("  Customer: " + customerAccountNumber);
+            System.out.println("  Payment Method: " + paymentMethodStr);
+            System.out.println("  Notes: " + notes);
+            System.out.println("  Discount Amount: " + discountAmount);
 
             // Validate customer exists
             Customer customer = customerService.findCustomerByAccountNumber(customerAccountNumber);
+            System.out.println("Customer found: " + (customer != null));
             if (customer == null) {
                 setErrorMessage(request, "Customer not found");
                 showCreateForm(request, response);
@@ -205,10 +286,20 @@ public class BillServlet extends BaseServlet {
             bill.setPaymentMethod(Bill.PaymentMethod.valueOf(paymentMethodStr));
             bill.setNotes(notes);
             bill.setCustomer(customer);
+            
+            // Apply discount to bill
+            if (discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+                bill.setDiscountAmount(discountAmount);
+                System.out.println("Discount applied to bill: " + discountAmount);
+            }
 
             // Get bill items from request
             String[] itemIds = request.getParameterValues("itemId[]");
             String[] quantities = request.getParameterValues("quantity[]");
+
+            System.out.println("Processing bill items:");
+            System.out.println("  Item IDs: " + (itemIds != null ? String.join(", ", itemIds) : "null"));
+            System.out.println("  Quantities: " + (quantities != null ? String.join(", ", quantities) : "null"));
 
             if (itemIds != null && quantities != null) {
                 for (int i = 0; i < itemIds.length; i++) {
@@ -216,16 +307,31 @@ public class BillServlet extends BaseServlet {
                         String itemId = itemIds[i];
                         int quantity = Integer.parseInt(quantities[i]);
 
+                        System.out.println("  Processing item " + (i+1) + ":");
+                        System.out.println("    Item ID: " + itemId);
+                        System.out.println("    Quantity: " + quantity);
+
                         if (quantity > 0) {
                             Item item = itemService.findItemById(itemId);
+                            System.out.println("    Item found: " + (item != null));
+                            if (item != null) {
+                                System.out.println("    Item stock: " + item.getStockQuantity());
+                                System.out.println("    Can sell: " + item.canSell(quantity));
+                            }
+                            
                             if (item != null && item.canSell(quantity)) {
                                 BillItem billItem = new BillItem(billNumber, item, quantity);
                                 bill.addBillItem(billItem);
+                                System.out.println("    Bill item added successfully");
+                            } else {
+                                System.out.println("    Item cannot be sold - insufficient stock or invalid item");
                             }
                         }
                     }
                 }
             }
+
+            System.out.println("Total bill items: " + bill.getBillItems().size());
 
             if (bill.getBillItems().isEmpty()) {
                 setErrorMessage(request, "Please add at least one item to the bill");
@@ -233,8 +339,17 @@ public class BillServlet extends BaseServlet {
                 return;
             }
 
+            // Recalculate bill totals to include discount
+            bill.recalculateAmounts();
+            System.out.println("Bill totals after recalculation:");
+            System.out.println("  Subtotal: " + bill.getSubtotal());
+            System.out.println("  Discount: " + bill.getDiscountAmount());
+            System.out.println("  Total: " + bill.getTotalAmount());
+
             // Create bill
+            System.out.println("Calling billService.createBill()");
             boolean created = billService.createBill(bill);
+            System.out.println("Bill creation result: " + created);
 
             if (created) {
                 setSuccessMessage(request, "Bill created successfully");
@@ -246,9 +361,12 @@ public class BillServlet extends BaseServlet {
             }
 
         } catch (NumberFormatException e) {
+            System.err.println("NumberFormatException: " + e.getMessage());
             setErrorMessage(request, "Invalid quantity format");
             showCreateForm(request, response);
         } catch (Exception e) {
+            System.err.println("Unexpected error in createBill: " + e.getMessage());
+            e.printStackTrace();
             setErrorMessage(request, "Error creating bill: " + e.getMessage());
             showCreateForm(request, response);
         }
@@ -274,6 +392,57 @@ public class BillServlet extends BaseServlet {
         }
 
         redirectTo(response, request.getContextPath() + "/bills");
+    }
+
+    /**
+     * Delete bill (cancel and mark as deleted)
+     */
+    private void deleteBill(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        try {
+            String billNumber = getSanitizedParameter(request, PARAM_ID);
+
+            if (!ValidationUtils.isValidBillNumber(billNumber)) {
+                setErrorMessage(request, "Invalid bill number");
+                showBillList(request, response);
+                return;
+            }
+
+            // Check permission
+            User currentUser = getCurrentUser(request);
+            if (!currentUser.hasPermission("BILL_MANAGEMENT")) {
+                setErrorMessage(request, "You don't have permission to delete bills");
+                showBillList(request, response);
+                return;
+            }
+
+            // Find existing bill
+            Bill existingBill = billService.findBillByNumber(billNumber);
+            if (existingBill == null) {
+                setErrorMessage(request, "Bill not found");
+                showBillList(request, response);
+                return;
+            }
+
+            // Cancel bill (this will restore stock and mark as cancelled)
+            boolean success = billService.cancelBill(billNumber);
+
+            if (success) {
+                setSuccessMessage(request, "Bill deleted successfully!");
+                logAction(request, "DELETE_BILL", "Bill: " + billNumber);
+                response.sendRedirect(request.getContextPath() + "/bills");
+            } else {
+                setErrorMessage(request, "Failed to delete bill. Please try again.");
+                showBillList(request, response);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error deleting bill: " + e.getMessage());
+            e.printStackTrace();
+            setErrorMessage(request, "Error deleting bill: " + e.getMessage());
+            showBillList(request, response);
+        }
     }
 
     @Override
