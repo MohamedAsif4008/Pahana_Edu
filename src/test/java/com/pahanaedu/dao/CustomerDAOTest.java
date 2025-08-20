@@ -11,13 +11,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Comprehensive test class for CustomerDAO
- * Demonstrates TDD approach and proper testing practices
- * 
- * @author Pahana Edu Development Team
- * @version 1.0
- */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Customer DAO Tests")
 public class CustomerDAOTest {

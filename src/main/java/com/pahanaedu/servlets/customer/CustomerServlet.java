@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * CustomerServlet - Fixed to match working pattern from original code
- */
+
 @WebServlet(name = "CustomerServlet", urlPatterns = {"/customers", "/customer"})
 public class CustomerServlet extends BaseServlet {
 
@@ -30,9 +28,6 @@ public class CustomerServlet extends BaseServlet {
         System.out.println("CustomerServlet initialized successfully");
     }
 
-    /**
-     * Handle GET requests - Display customers, show forms, get customer details
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -115,9 +110,6 @@ public class CustomerServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Show customer list with pagination and search - FIXED
-     */
     private void showCustomerList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -188,9 +180,6 @@ public class CustomerServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Show customer details - FIXED to match working pattern
-     */
     private void showCustomerDetails(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -225,9 +214,6 @@ public class CustomerServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Show create customer form - FIXED
-     */
     private void showCreateCustomerForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -249,9 +235,6 @@ public class CustomerServlet extends BaseServlet {
         forwardToJSP(request, response, "customer/create.jsp");
     }
 
-    /**
-     * Show edit customer form - FIXED
-     */
     private void showEditCustomerForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

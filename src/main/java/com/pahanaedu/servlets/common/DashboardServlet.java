@@ -19,17 +19,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Servlet for handling dashboard operations
- * Shows main dashboard with statistics and overview
- *
- * Design Patterns Used:
- * - MVC Pattern: Controller for dashboard
- * - Command Pattern: Dashboard actions
- *
- * @author Pahana Edu Development Team
- * @version 1.0
- */
+
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard", "/home"})
 public class DashboardServlet extends BaseServlet {
 
@@ -38,9 +28,6 @@ public class DashboardServlet extends BaseServlet {
     private ItemService itemService;
     private BillService billService;
 
-    /**
-     * Initialize services
-     */
     @Override
     public void init() throws ServletException {
         super.init();
@@ -56,9 +43,6 @@ public class DashboardServlet extends BaseServlet {
         this.billService = new BillServiceImpl(billDAO, customerService, itemService);
     }
 
-    /**
-     * Handle GET requests - Show dashboard
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -91,9 +75,6 @@ public class DashboardServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Load dynamic dashboard statistics and data
-     */
     private void loadDashboardData(HttpServletRequest request) {
         try {
             // Get real-time statistics from services
@@ -148,9 +129,6 @@ public class DashboardServlet extends BaseServlet {
         }
     }
 
-    /**
-     * Handle POST requests (for future dashboard actions)
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -159,9 +137,7 @@ public class DashboardServlet extends BaseServlet {
         doGet(request, response);
     }
 
-    /**
-     * Clean up resources
-     */
+
     @Override
     public void destroy() {
         super.destroy();

@@ -57,9 +57,6 @@ public class LoginServlet extends BaseServlet {
         this.userService = new UserServiceImpl();
     }
 
-    /**
-     * Handle GET requests - Display login page
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

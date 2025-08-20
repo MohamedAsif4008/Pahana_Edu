@@ -22,19 +22,10 @@ public class CustomerDAO {
 
     private final DatabaseConnection dbConnection;
 
-    /**
-     * Constructor - initialize with database connection
-     */
     public CustomerDAO() {
         this.dbConnection = DatabaseConnection.getInstance();
     }
 
-    /**
-     * Create a new customer
-     *
-     * @param customer Customer object to create
-     * @return true if creation successful, false otherwise
-     */
     public boolean createCustomer(Customer customer) {
         // Add basic validation
         if (customer == null || customer.getAccountNumber() == null || 

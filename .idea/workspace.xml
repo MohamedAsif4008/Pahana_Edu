@@ -10,16 +10,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/dao/CustomerDAOTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/ValidationUtilsTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.smarttomcat/Pahana_Edu/conf/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.smarttomcat/Pahana_Edu/conf/server.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/interfaces/CustomerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/ValidationUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/ValidationUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/auth/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/auth/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerAPIServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerAPIServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/DatabaseConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/auth/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/auth/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/dao/CustomerDAOTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/dao/CustomerDAOTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/ValidationUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/ValidationUtilsTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,39 +64,114 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.MyFirstTest.executor&quot;: &quot;Run&quot;,
-    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.Pahana_Edu.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Smart Tomcat.Pahana_Edu.executor&quot;: &quot;Run&quot;,
-    &quot;Tomcat Server.Pahana Edu Tomcat.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/MOHAMED/IdeaProjects/Pahana_Edu&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.CustomerDAOTest.executor": "Run",
+    "JUnit.CustomerDAOTest.testCreateValidCustomer.executor": "Run",
+    "JUnit.CustomerDAOTest.testDuplicateAccountNumber.executor": "Run",
+    "JUnit.CustomerServiceTest.executor": "Run",
+    "JUnit.CustomerServiceTest.testServicePerformance.executor": "Run",
+    "JUnit.CustomerServiceTest.testServiceValidation.executor": "Run",
+    "JUnit.MyFirstTest.executor": "Run",
+    "JUnit.ValidationUtilsTest.executor": "Run",
+    "JUnit.ValidationUtilsTest.testSecurityValidation.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.Pahana_Edu.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Smart Tomcat.Pahana_Edu.executor": "Run",
+    "Tomcat Server.Pahana Edu Tomcat.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/MOHAMED/IdeaProjects/Pahana_Edu",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\MOHAMED\IdeaProjects\Pahana_Edu\src\main\resources" />
     </key>
   </component>
   <component name="RunManager" selected="Smart Tomcat.Pahana_Edu">
-    <configuration name="MyFirstTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CustomerDAOTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Pahana_Edu" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="MyFirstTest" />
-      <option name="METHOD_NAME" value="" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pahanaedu.dao.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pahanaedu.dao" />
+      <option name="MAIN_CLASS_NAME" value="com.pahanaedu.dao.CustomerDAOTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CustomerServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Pahana_Edu" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pahanaedu.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pahanaedu.service" />
+      <option name="MAIN_CLASS_NAME" value="com.pahanaedu.service.CustomerServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CustomerServiceTest.testServicePerformance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Pahana_Edu" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pahanaedu.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pahanaedu.service" />
+      <option name="MAIN_CLASS_NAME" value="com.pahanaedu.service.CustomerServiceTest" />
+      <option name="METHOD_NAME" value="testServicePerformance" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ValidationUtilsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Pahana_Edu" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pahanaedu.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pahanaedu.util" />
+      <option name="MAIN_CLASS_NAME" value="com.pahanaedu.util.ValidationUtilsTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ValidationUtilsTest.testSecurityValidation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Pahana_Edu" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pahanaedu.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.pahanaedu.util" />
+      <option name="MAIN_CLASS_NAME" value="com.pahanaedu.util.ValidationUtilsTest" />
+      <option name="METHOD_NAME" value="testSecurityValidation" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -265,14 +343,22 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.MyFirstTest" />
+      <item itemvalue="JUnit.CustomerDAOTest" />
+      <item itemvalue="JUnit.CustomerServiceTest" />
+      <item itemvalue="JUnit.CustomerServiceTest.testServicePerformance" />
+      <item itemvalue="JUnit.ValidationUtilsTest" />
+      <item itemvalue="JUnit.ValidationUtilsTest.testSecurityValidation" />
       <item itemvalue="Maven.Pahana_Edu" />
       <item itemvalue="Smart Tomcat.Unnamed" />
       <item itemvalue="Smart Tomcat.Pahana_Edu" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MyFirstTest" />
+        <item itemvalue="JUnit.ValidationUtilsTest" />
+        <item itemvalue="JUnit.CustomerServiceTest" />
+        <item itemvalue="JUnit.CustomerDAOTest" />
+        <item itemvalue="JUnit.CustomerServiceTest.testServicePerformance" />
+        <item itemvalue="JUnit.ValidationUtilsTest.testSecurityValidation" />
       </list>
     </recent_temporary>
   </component>
@@ -290,5 +376,30 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java</url>
+          <line>100</line>
+          <properties class="com.pahanaedu.dao.CustomerDAO" method="searchByName">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java</url>
+          <line>241</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java</url>
+          <line>93</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

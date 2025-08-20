@@ -25,16 +25,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerDAO customerDAO;
 
-    /**
-     * Constructor with dependency injection
-     */
     public CustomerServiceImpl() {
         this.customerDAO = new CustomerDAO();
     }
 
-    /**
-     * Constructor for testing with DAO injection
-     */
     public CustomerServiceImpl(CustomerDAO customerDAO) {
         this.customerDAO = customerDAO;
     }

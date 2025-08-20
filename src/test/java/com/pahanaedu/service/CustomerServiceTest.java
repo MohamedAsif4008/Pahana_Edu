@@ -15,14 +15,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Test class for CustomerService business logic
- * Uses ONLY JUnit - No external mocking frameworks
- * Tests real service layer with database integration
- * 
- * @author Pahana Edu Development Team
- * @version 1.0
- */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Customer Service Tests - JUnit Only")
 public class CustomerServiceTest {
