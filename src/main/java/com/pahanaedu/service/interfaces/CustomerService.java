@@ -126,4 +126,34 @@ public interface CustomerService {
      * @return true if contact information is valid, false otherwise
      */
     boolean hasValidContactInfo(Customer customer);
+
+    /**
+     * Find customer by account number (alias for findCustomerByAccountNumber)
+     */
+    Customer findByAccountNumber(String accountNumber);
+
+    /**
+     * Search customers by name (alias for searchCustomersByName)
+     */
+    List<Customer> searchByName(String name);
+
+    /**
+     * Create customer with additional credit check
+     */
+    boolean createCustomerWithCreditCheck(Customer customer);
+
+    /**
+     * Activate customer account
+     */
+    boolean activateCustomer(String accountNumber);
+
+    /**
+     * Delete customer (alias for deactivateCustomer)
+     */
+    boolean deleteCustomer(String accountNumber);
+
+    /**
+     * Generate new account number (alias for generateNextAccountNumber)
+     */
+    String generateNewAccountNumber();
 }

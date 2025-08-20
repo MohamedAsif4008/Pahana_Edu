@@ -36,6 +36,12 @@ public class CustomerDAO {
      * @return true if creation successful, false otherwise
      */
     public boolean createCustomer(Customer customer) {
+        // Add basic validation
+        if (customer == null || customer.getAccountNumber() == null || 
+            customer.getName() == null || customer.getName().trim().isEmpty()) {
+            return false;
+        }
+        
         String sql = """
             INSERT INTO customers (account_number, name, address, phone_number, email, credit_limit, is_active) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -187,6 +193,16 @@ public class CustomerDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Delete customer (soft delete - alias for deactivateCustomer)
+     *
+     * @param accountNumber Account number to delete
+     * @return true if deletion successful, false otherwise
+     */
+    public boolean deleteCustomer(String accountNumber) {
+        return deactivateCustomer(accountNumber);
     }
 
     /**

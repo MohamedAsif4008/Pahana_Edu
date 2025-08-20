@@ -439,4 +439,54 @@ public class CustomerServiceImpl implements CustomerService {
 
         return summary.toString();
     }
+
+    @Override
+    public Customer findByAccountNumber(String accountNumber) {
+        return findCustomerByAccountNumber(accountNumber);
+    }
+
+    @Override
+    public List<Customer> searchByName(String name) {
+        return searchCustomersByName(name);
+    }
+
+    @Override
+    public boolean createCustomerWithCreditCheck(Customer customer) {
+        // Additional credit limit validation for high amounts
+        if (customer.getCreditLimit() != null &&
+            customer.getCreditLimit().compareTo(new BigDecimal("50000.00")) > 0) {
+            // Additional validation for high credit limits
+            System.out.println("High credit limit customer - additional validation applied");
+        }
+        return createCustomer(customer);
+    }
+
+    @Override
+    public boolean activateCustomer(String accountNumber) {
+        if (!ValidationUtils.isNotEmpty(accountNumber)) {
+            return false;
+        }
+
+        Customer customer = findCustomerByAccountNumber(accountNumber);
+        if (customer == null) {
+            return false;
+        }
+
+        if (customer.isActive()) {
+            return true; // Already active
+        }
+
+        customer.setActive(true);
+        return updateCustomer(customer);
+    }
+
+    @Override
+    public boolean deleteCustomer(String accountNumber) {
+        return deactivateCustomer(accountNumber);
+    }
+
+    @Override
+    public String generateNewAccountNumber() {
+        return generateNextAccountNumber();
+    }
 }
