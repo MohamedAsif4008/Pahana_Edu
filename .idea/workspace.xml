@@ -9,21 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/CustomerDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/service/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/auth/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/auth/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/common/DashboardServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerAPIServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerAPIServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/servlets/customer/CustomerServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pahanaedu/util/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/views/auth/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/views/auth/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/dao/CustomerDAOTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/dao/CustomerDAOTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/service/CustomerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/ValidationUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/pahanaedu/util/ValidationUtilsTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="1d942027-c63c-4e7b-8557-5d4f93b71231" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
